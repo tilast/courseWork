@@ -26,7 +26,11 @@ void CanvasWidget::mousePressEvent(QMouseEvent *event) {
 
             selected = shapes[shapes.size() - 1];
             selected->select(true);
+            
+            if(pressedPoint )
             pressedPoint -= selected->getCenter();
+            
+            
             break;
         }
     }

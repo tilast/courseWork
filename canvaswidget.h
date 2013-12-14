@@ -29,8 +29,14 @@ protected:
     virtual void mouseReleaseEvent(QMouseEvent * event);
     virtual void paintEvent(QPaintEvent * event);
 
+//    void keyPressEvent(QKeyEvent *);
+//    void keyReleaseEvent(QKeyEvent *);
+
     Point2D pressedPoint;
     bool creating;
+    bool toResize;
+
+    void toFront(int number);
 };
 
 #endif // CANVASWIDGET_H

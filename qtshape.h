@@ -10,8 +10,13 @@ class QtShape : public Shape <T>
 public:
 
     virtual void draw(QPainter & painter) const = 0;
-    virtual void select(bool sel) { selected = sel; }
-    virtual bool isSelected() const { return selected; }
+
+    virtual void select(bool sel) {
+        selected = sel;
+    }
+    virtual bool isSelected() const {
+        return selected;
+    }
 
 protected:
     bool selected;
