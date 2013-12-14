@@ -2,6 +2,11 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include "canvaswidget.h"
+
+#include <QDebug>
+#include <QKeyEvent>
+
 
 namespace Ui {
 class MainWindow;
@@ -17,6 +22,11 @@ public:
     
 private:
     Ui::MainWindow *ui;
+    CanvasWidget *canvas;
+
+protected:
+    void keyPressEvent(QKeyEvent* event);
+    void deleteSelected();
 };
 
 #endif // MAINWINDOW_H
