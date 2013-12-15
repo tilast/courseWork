@@ -1,5 +1,5 @@
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#ifndef MAINWINDOW_GRAPHICSSCENE_H
+#define MAINWINDOW_GRAPHICSSCENE_H
 
 #include <QMainWindow>
 #include "canvaswidget.h"
@@ -24,6 +24,7 @@ public:
     
 protected:
     void keyPressEvent(QKeyEvent* event);
+    void keyReleaseEvent(QKeyEvent * event);
     void deleteSelected();
 
 private slots:
@@ -52,7 +53,6 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
-
     CanvasWidget *canvas;
 
     QString curFile;
@@ -88,4 +88,4 @@ private:
 
 };
 
-#endif // MAINWINDOW_H
+#endif // MAINWINDOW_GRAPHICSSCENE_H
