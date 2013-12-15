@@ -113,6 +113,7 @@ bool MainWindow::parseXMLForSVG(const QString &filename)
 
     QXmlStreamReader xml(file);
 
+    canvas->shapes.clear();
     while (!xml.atEnd() && !xml.hasError())
         {
             QXmlStreamReader::TokenType token = xml.readNext();
@@ -284,8 +285,8 @@ void MainWindow::createActions()
 void MainWindow::newFile() { qDebug() <<"new file"; }
 void MainWindow::open() //Open file
 {
-    QString fileName = loadFileNameDialog();
-    parseXMLForSVG(fileName);
+    curFileName = loadFileNameDialog();
+    parseXMLForSVG(curFileName);
     update();
 }
 
@@ -295,14 +296,14 @@ void MainWindow::close() { //Closing file
 
 bool MainWindow::save() { //Save file
     canvas->setModified(false);
-    return saveFileByText(curFile, svgImageCode(&canvas->shapes));
+    return saveFileByText(curFileName, svgImageCode(&canvas->shapes));
 }
 bool MainWindow::saveAs() { qDebug() <<"saveAs file"; return true;}
 
 bool MainWindow::exportSVG()
 {
     canvas->setModified(false);
-    return saveFileByText(curFile, svgImageCode(&canvas->shapes));
+    return saveFileByText(curFileName, svgImageCode(&canvas->shapes));
 
 }
 void MainWindow::print() { qDebug() <<"print file"; }

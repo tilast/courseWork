@@ -56,7 +56,7 @@ private:
     Ui::MainWindow *ui;
     CanvasWidget *canvas;
 
-    QString curFile;
+    QString curFileName;
 
     void createMenus();
     void createActions();
