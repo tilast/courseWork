@@ -1,13 +1,14 @@
-#ifndef QTRECTANGLE_H
-#define QTRECTANGLE_H
+#ifndef QTPARALLELOGRAM_H
+#define QTPARALLELOGRAM_H
 
-#include "rectangle.h"
+#include "parallelogram.h"
 #include "qtshape.h"
 #include <QPainter>
 
-class QtRectangle : public Rectangle, public QtShape2D {
+class QtParallelogram : public Parallelogram, public QtShape2D {
 public:
-    QtRectangle(const Point2D& p1, const Point2D& p2);
+    QtParallelogram(const Point2D& p1, const Point2D& p2, const float& cp);
+    QtParallelogram(const Point2D& p1, const Point2D& p2);
     DrawStyle& getStyle();
     const DrawStyle& getStyle() const;
     Point2D getCenter() const;
@@ -21,6 +22,8 @@ public:
     bool isSelected() const;
     bool isTopLeft(Point2D pressedPoint, Point2D epsilon) const;
     bool isBottomRight(Point2D pressedPoint, Point2D epsilon) const;
+    bool isControlPoint(Point2D pressedPoint, Point2D epsilon) const;
+    void setControlPoint(const float &cp);
 };
 
-#endif // QTRECTANGLE_H
+#endif // QTPARALLELOGRAM_H

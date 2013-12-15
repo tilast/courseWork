@@ -8,6 +8,7 @@
 #include <vector>
 #include "qtshape.h"
 #include "qtrectangle.h"
+#include "qtparallelogram.h"
 
 class CanvasWidget : public QWidget
 {
@@ -38,7 +39,7 @@ protected:
     Point2D pressedPoint, epsilon;
     bool creating;
 
-    bool leftResize, rightResize;
+    bool leftResize, rightResize, controlPointModify;
 
     void toFront(int number);
 

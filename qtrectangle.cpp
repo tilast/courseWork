@@ -1,5 +1,7 @@
 #include "qtrectangle.h"
 
+#include <QDebug>
+
 QtRectangle::QtRectangle(const Point2D& p1, const Point2D& p2) : Rectangle(p1, p2) {
 }
 
@@ -59,7 +61,6 @@ void QtRectangle::move(const Point2D& destination) {
 }
 void QtRectangle::resize(const Point2D& destination, short type) {
     Rectangle::resize(destination, type);
-//    Rectangle::move(destination);
 }
 bool QtRectangle::belongs(const Point2D& p) {
     return Rectangle::belongs(p);

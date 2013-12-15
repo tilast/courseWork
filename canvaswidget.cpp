@@ -1,5 +1,6 @@
 #include "canvaswidget.h"
 
+#include <QDebug>
 CanvasWidget::CanvasWidget(QWidget *parent) :
     QWidget(parent), selected(NULL), creating(false)
 {
@@ -35,6 +36,12 @@ void CanvasWidget::mousePressEvent(QMouseEvent *event) {
                 rightResize = true;
             }
 
+//            if(selected->isParallelogram()) {
+                if(((QtParallelogram*)selected)->isControlPoint(pressedPoint, epsilon)) {
+                    controlPointModify = true;
+                }
+//            }
+
             pressedPoint -= selected->getCenter();
             break;
         }
@@ -54,12 +61,14 @@ void CanvasWidget::mouseMoveEvent(QMouseEvent *event) {
                 selected->resize(currentPoint, 0);
             } else if(rightResize) {
                 selected->resize(currentPoint, 1);
+            } else if(controlPointModify) {
+                ((QtParallelogram*)selected)->setControlPoint(currentPoint.x);
             } else {
                 selected->move(currentPoint - pressedPoint);
             }
         } else {
             creating = true;
-            selected = new QtRectangle(pressedPoint, pressedPoint);
+            selected = new QtParallelogram(pressedPoint, pressedPoint, 50.0);
             shapes.push_back(selected);
             selected->select(true);
         }
@@ -75,6 +84,7 @@ void CanvasWidget::mouseReleaseEvent(QMouseEvent *) {
     update();
     leftResize = false;
     rightResize = false;
+    controlPointModify = false;
 }
 
 void CanvasWidget::keyPressEvent(QKeyEvent * event) {

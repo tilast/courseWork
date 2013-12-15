@@ -11,7 +11,6 @@ public:
     virtual void move(const Point2D& destination);
     virtual void resize(const Point2D& destination, short type);
     virtual bool belongs(const Point2D& point);
-
 };
 
 #endif // RECTANGLE_H

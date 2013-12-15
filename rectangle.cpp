@@ -2,11 +2,13 @@
 
 Rectangle::Rectangle(const Point2D& p1, const Point2D& p2) {
     setBounds(p1, p2);
+    type = 1;
 }
 
 void Rectangle::setBounds(const Point2D &p1, const Point2D &p2) {
     center = (p1 + p2) * 0.5;
     size = (p1 - p2).makePositive();
+    type = 1;
 }
 void Rectangle::move(const Point2D& destination) {
     center = destination;

@@ -19,7 +19,9 @@ SOURCES += main.cpp\
     shape.cpp \
     rectangle.cpp \
     qtrectangle.cpp \
-    canvaswidget.cpp
+    canvaswidget.cpp \
+    parallelogram.cpp \
+    qtparallelogram.cpp
 
 HEADERS  += mainwindow.h \
     base.h \
@@ -28,6 +30,8 @@ HEADERS  += mainwindow.h \
     rectangle.h \
     qtshape.h \
     qtrectangle.h \
-    canvaswidget.h
+    canvaswidget.h \
+    parallelogram.h \
+    qtparallelogram.h
 
 FORMS    += mainwindow.ui
