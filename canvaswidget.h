@@ -30,7 +30,7 @@ public:
     int pressedKeyCode;
 
     bool isModified() { return __isModified; }
-
+    void selectAll();
 signals:
     
 public slots:

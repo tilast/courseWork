@@ -13,6 +13,13 @@ CanvasWidget::~CanvasWidget() {
     }
 }
 
+void CanvasWidget::selectAll() {
+    selectedShapes.clear();
+    for(auto iter = shapes.begin(); iter != shapes.end(); iter++) {
+        selectedShapes.insert(*iter);
+    }
+}
+
 void CanvasWidget::mousePressEvent(QMouseEvent *event) {
     pressedPoint.x = event->localPos().x();
     pressedPoint.y = event->localPos().y();

@@ -165,7 +165,9 @@ void MainWindow::redo() { qDebug() <<"redo"; }
 void MainWindow::cut() { qDebug() <<"cut"; }
 void MainWindow::copy() { qDebug() <<"copy"; }
 void MainWindow::paste()  { qDebug() <<"paste"; }
-void MainWindow::selectAll()  { qDebug() <<"selectAll"; }
+void MainWindow::selectAll()  {
+    canvas->selectAll();
+}
 
 void MainWindow::deleteAction()  { qDebug() <<"delete"; deleteSelected(); }
 
