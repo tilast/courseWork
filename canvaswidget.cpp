@@ -24,9 +24,9 @@ void CanvasWidget::mousePressEvent(QMouseEvent *event) {
     pressedPoint.x = event->localPos().x();
     pressedPoint.y = event->localPos().y();
 
-    if(selected)
+    if(selected && keyPressed(Qt::Key_Control)) {
         selected->select(false);
-
+    }
     selected = NULL;
 
     for(unsigned i = shapes.size(); i > 0; i--) {
@@ -37,7 +37,7 @@ void CanvasWidget::mousePressEvent(QMouseEvent *event) {
             selected->select(true);
 
             //Если не нажата клавиша CTRL, то выделение снимается, а выделяется только один элемент
-            if(pressedKeyCode == 0 || pressedKeyCode != Qt::Key_Control)
+            if(keyPressed(Qt::Key_Control))
                 selectedShapes.clear();
 
             selectedShapes.insert(selected);
@@ -86,7 +86,10 @@ void CanvasWidget::mouseMoveEvent(QMouseEvent *event) {
 void CanvasWidget::mouseReleaseEvent(QMouseEvent *) {
     if(creating) {
         creating = false;
+        selected->select(false);
+        selected = NULL;
     }
+
     update();
     leftResize = false;
     rightResize = false;

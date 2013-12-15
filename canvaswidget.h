@@ -51,6 +51,7 @@ protected:
 
 private:
     bool __isModified;
+    bool keyPressed(Qt::Key keyCode) { return (pressedKeyCode == 0 || pressedKeyCode != keyCode); }
 };
 
 #endif // CANVASWIDGET_H
