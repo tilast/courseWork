@@ -6,22 +6,43 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>784</width>
+    <width>676</width>
     <height>487</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
+  <property name="autoFillBackground">
+   <bool>true</bool>
+  </property>
+  <property name="styleSheet">
+   <string notr="true"/>
+  </property>
+  <property name="unifiedTitleAndToolBarOnMac">
+   <bool>true</bool>
+  </property>
   <widget class="QWidget" name="centralWidget">
    <widget class="CanvasWidget" name="mainCanvas" native="true">
     <property name="geometry">
      <rect>
-      <x>20</x>
-      <y>20</y>
-      <width>731</width>
-      <height>381</height>
+      <x>0</x>
+      <y>0</y>
+      <width>779</width>
+      <height>429</height>
      </rect>
+    </property>
+    <property name="sizePolicy">
+     <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
+      <horstretch>0</horstretch>
+      <verstretch>0</verstretch>
+     </sizepolicy>
+    </property>
+    <property name="autoFillBackground">
+     <bool>false</bool>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: red;</string>
     </property>
    </widget>
   </widget>
@@ -30,7 +51,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>784</width>
+     <width>676</width>
      <height>22</height>
     </rect>
    </property>

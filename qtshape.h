@@ -19,6 +19,7 @@ public:
     }
     virtual bool isTopLeft(Point2D pressedPoint, Point2D epsilon) const = 0;
     virtual bool isBottomRight(Point2D pressedPoint, Point2D epsilon) const = 0;
+    virtual QString svgElementCode() const = 0;
 
 protected:
     bool selected;

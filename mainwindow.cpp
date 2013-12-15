@@ -154,7 +154,21 @@ void MainWindow::newFile() { qDebug() <<"new file"; }
 void MainWindow::open() {qDebug() <<"open file";}
 void MainWindow::close() {qDebug() <<"close file";}
 
-bool MainWindow::save() { qDebug() <<"save file";  return true;}
+bool MainWindow::save() {
+    qDebug() <<"save file";
+//    return true;
+
+    shapesContainer *shapes = &canvas->shapes;
+    selectedShapesContainer *selectedShapes = &canvas->selectedShapes;
+    QString elements;
+    for(shapesContainer::const_iterator it = shapes->begin(); it != shapes->end(); it++) {
+        elements += (*it)->svgElementCode();
+    }
+
+    QString svgCode = QString("<svg width=\"%2\" height=\"%3\">%1</svg>").arg(elements).arg(canvas->geometry().width()).arg(canvas->geometry().height());
+    qDebug() <<svgCode;
+    return true;
+}
 bool MainWindow::saveAs() { qDebug() <<"saveAs file"; return true;}
 
 void MainWindow::print() { qDebug() <<"print file"; }
