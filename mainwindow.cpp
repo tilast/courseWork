@@ -2,6 +2,7 @@
 #include "ui_mainwindow.h"
 
 #include <QMessageBox>
+#include <QFileDialog>
 
 #include <vector>
 #include <iostream>
@@ -146,17 +147,7 @@ void MainWindow::createActions()
     connect(selectAllAct,SIGNAL(triggered()),this,SLOT(selectAll()));
 
 }
-void MainWindow::loadFile(const QString &fileName) { qDebug() <<"file loading"; }
-bool MainWindow::saveFile(const QString &fileName) { qDebug() <<"file saving"; }
-void MainWindow::setCurrentFile(const QString &fileName) { qDebug() <<"current file setting"; }
-
-void MainWindow::newFile() { qDebug() <<"new file"; }
-void MainWindow::open() {qDebug() <<"open file";}
-void MainWindow::close() {qDebug() <<"close file";}
-
-bool MainWindow::save() {
-    qDebug() <<"save file";
-//    return true;
+const QString MainWindow::svgImageCode() {
 
     shapesContainer *shapes = &canvas->shapes;
     selectedShapesContainer *selectedShapes = &canvas->selectedShapes;
@@ -166,8 +157,43 @@ bool MainWindow::save() {
     }
 
     QString svgCode = QString("<svg width=\"%2\" height=\"%3\">%1</svg>").arg(elements).arg(canvas->geometry().width()).arg(canvas->geometry().height());
-    qDebug() <<svgCode;
-    return true;
+    return svgCode;
+}
+
+void MainWindow::loadFile(const QString &fileName) { qDebug() <<"file loading"; }
+bool MainWindow::saveFile(QString fileName) {
+    qDebug() <<"file saving";
+    QString svg = svgImageCode();
+
+    if (fileName.isEmpty()) {
+        fileName = QFileDialog::getSaveFileName(this,
+                                                    tr("Save SVG"), "",
+                                                    tr("SVG files (*.svg);;All Files (*)"));
+    }
+    if (fileName.isEmpty())
+             return false;
+    else {
+        QFile file(fileName);
+        if (!file.open(QIODevice::WriteOnly)) {
+            QMessageBox::information(this, tr("Unable to open file"),
+            file.errorString());
+            return false;
+        }
+        QTextStream out(&file);
+//            out.setVersion(QDataStream::Qt_5_1);
+            out <<svgImageCode();
+    }
+
+}
+void MainWindow::setCurrentFile(const QString &fileName) { qDebug() <<"current file setting"; }
+
+void MainWindow::newFile() { qDebug() <<"new file"; }
+void MainWindow::open() {qDebug() <<"open file";}
+void MainWindow::close() {qDebug() <<"close file";}
+
+bool MainWindow::save() {
+    qDebug() <<"save file";
+    return saveFile(curFile);
 }
 bool MainWindow::saveAs() { qDebug() <<"saveAs file"; return true;}
 
