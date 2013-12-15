@@ -59,6 +59,7 @@ void QtRectangle::move(const Point2D& destination) {
 }
 void QtRectangle::resize(const Point2D& destination, short type) {
     Rectangle::resize(destination, type);
+//    Rectangle::move(destination);
 }
 bool QtRectangle::belongs(const Point2D& p) {
     return Rectangle::belongs(p);

@@ -59,7 +59,7 @@ void MainWindow::deleteSelected()
 
     qDebug() <<"Selected shape: "<<selectedShape;
 
-    auto itemItr = std::find(shapes->begin(), shapes->end(), selectedShape); //Searching
+    std::vector< QtShape2D* >::iterator itemItr = std::find(shapes->begin(), shapes->end(), selectedShape); //Searching
 
     if (itemItr != shapes->end()) {
         shapes->erase(itemItr);

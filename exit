@@ -1,0 +1,42 @@
+commit bac142d147bec93888ff7bcbbe9c1ba9d4325a3b
+Merge: 2527a7e 4099831
+Author: tilast <tilast.lab@gmail.com>
+Date:   Sun Dec 15 12:51:31 2013 +0200
+
+    Merge branch 'master' of https://github.com/tilast/courseWork
+
+commit 2527a7e19d38b3f81d14df3fff4ba74bb6753839
+Author: tilast <tilast.lab@gmail.com>
+Date:   Sun Dec 15 12:42:19 2013 +0200
+
+    added scaling
+
+commit 4099831428b4e84709ef50aa925bc11abff970b0
+Author: Alexey Bondarenko <alexeybondarenko@me.com>
+Date:   Sun Dec 15 01:31:31 2013 +0200
+
+    all
+
+commit 3bb400ba535a02b482c0e853980b89dbc885c6ec
+Author: Alexey Bondarenko <alexeybondarenko@me.com>
+Date:   Sat Dec 14 23:33:24 2013 +0200
+
+    A
+
+commit f73536f6346c42290d54d1692caabb01f3df9b5d
+Author: tilast <tilast.lab@gmail.com>
+Date:   Sat Dec 14 22:59:22 2013 +0200
+
+    added some shit
+
+commit 412acc87aaeea12d2358cf2355369183777f1ec6
+Author: tilast <tilast.lab@gmail.com>
+Date:   Sat Dec 14 19:54:55 2013 +0200
+
+    aaaa
+
+commit 5e1c5d9c7638b284e3f3c8db27e333a6fd5df6eb
+Author: Ihor Kroosh <tilast.lab@gmail.com>
+Date:   Wed Oct 23 06:25:08 2013 -0700
+
+    Initial commit

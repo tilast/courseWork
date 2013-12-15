@@ -17,9 +17,9 @@ void Rectangle::resize(const Point2D& destination, short type) {
     Point2D p2 = center + size * 0.5;
     Point2D test = destination;
     if(type) {
-        setBounds(p1, destination);
+        setBounds(p1, test);
     } else {
-        setBounds(destination, p2);
+        setBounds(test, p2);
     }
 }
 
