@@ -57,14 +57,16 @@ private:
 
     QString curFile;
 
-    const QString svgImageCode();
-
     void createMenus();
     void createActions();
     void loadFile(const QString &fileName);
 
     bool maybeSave();
+
+    const QString svgImageCode();
+
     bool saveFile(QString fileName);
+
     void setCurrentFile(const QString &fileName);
 
     QMenu *fileMenu;
