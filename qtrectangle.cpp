@@ -18,6 +18,21 @@ void QtRectangle::draw(QPainter &painter) const {
         painter.drawEllipse(QPoint(br.x, br.y), 2, 2);
     }
 }
+
+bool QtRectangle::isTopLeft(Point2D pressedPoint, Point2D epsilon) const {
+    Point2D tl = Rectangle::center - Rectangle::size * 0.5;
+    Point2D minTL = tl - epsilon;
+    Point2D maxTL = tl + epsilon;
+    return ((pressedPoint.x > minTL.x) && (pressedPoint.y > minTL.y) && (pressedPoint.x < maxTL.x) && (pressedPoint.y < maxTL.y));
+}
+
+bool QtRectangle::isBottomRight(Point2D pressedPoint, Point2D epsilon) const {
+    Point2D br = Rectangle::center + Rectangle::size * 0.5;
+    Point2D minBR = br - epsilon;
+    Point2D maxBR = br + epsilon;
+    return ((pressedPoint.x > minBR.x) && (pressedPoint.y > minBR.y) && (pressedPoint.x < maxBR.x) && (pressedPoint.y < maxBR.y));
+}
+
 void QtRectangle::select(bool sel) {
     QtShape2D::select(sel);
 }
@@ -41,6 +56,9 @@ void QtRectangle::setBounds(const Point2D& p1, const Point2D& p2) {
 }
 void QtRectangle::move(const Point2D& destination) {
     Rectangle::move(destination);
+}
+void QtRectangle::resize(const Point2D& destination, short type) {
+    Rectangle::resize(destination, type);
 }
 bool QtRectangle::belongs(const Point2D& p) {
     return Rectangle::belongs(p);

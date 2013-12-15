@@ -12,6 +12,17 @@ void Rectangle::move(const Point2D& destination) {
     center = destination;
 }
 
+void Rectangle::resize(const Point2D& destination, short type) {
+    Point2D p1 = center - size * 0.5;
+    Point2D p2 = center + size * 0.5;
+    Point2D test = destination;
+    if(type) {
+        setBounds(p1, destination);
+    } else {
+        setBounds(destination, p2);
+    }
+}
+
 bool Rectangle::belongs(const Point2D& p) {
     Point2D p1 = center - size * 0.5;
     Point2D p2 = center + size * 0.5;

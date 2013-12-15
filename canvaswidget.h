@@ -3,6 +3,7 @@
 
 #include <QWidget>
 #include <QMouseEvent>
+#include <QKeyEvent>
 #include <QPaintEvent>
 #include <vector>
 #include "qtshape.h"
@@ -29,12 +30,13 @@ protected:
     virtual void mouseReleaseEvent(QMouseEvent * event);
     virtual void paintEvent(QPaintEvent * event);
 
-//    void keyPressEvent(QKeyEvent *);
-//    void keyReleaseEvent(QKeyEvent *);
+    virtual void keyPressEvent(QKeyEvent *);
+    virtual void keyReleaseEvent(QKeyEvent *);
 
-    Point2D pressedPoint;
+    Point2D pressedPoint, epsilon;
     bool creating;
-    bool toResize;
+
+    bool leftResize, rightResize;
 
     void toFront(int number);
 };

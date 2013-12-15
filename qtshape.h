@@ -17,6 +17,8 @@ public:
     virtual bool isSelected() const {
         return selected;
     }
+    virtual bool isTopLeft(Point2D pressedPoint, Point2D epsilon) const = 0;
+    virtual bool isBottomRight(Point2D pressedPoint, Point2D epsilon) const = 0;
 
 protected:
     bool selected;

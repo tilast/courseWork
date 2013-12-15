@@ -3,6 +3,8 @@
 CanvasWidget::CanvasWidget(QWidget *parent) :
     QWidget(parent), selected(NULL), creating(false)
 {
+    epsilon.x = 50;
+    epsilon.y = 50;
 }
 
 CanvasWidget::~CanvasWidget() {
@@ -26,6 +28,13 @@ void CanvasWidget::mousePressEvent(QMouseEvent *event) {
 
             selected = shapes[shapes.size() - 1];
             selected->select(true);
+
+            if(selected->isTopLeft(pressedPoint, epsilon)) {
+                leftResize = true;
+            } else if(selected->isBottomRight(pressedPoint, epsilon)) {
+                rightResize = true;
+            }
+
             pressedPoint -= selected->getCenter();
             break;
         }
@@ -41,7 +50,13 @@ void CanvasWidget::mouseMoveEvent(QMouseEvent *event) {
         if(creating) {
             shapes.back()->setBounds(pressedPoint, currentPoint);
         } else if(selected) {
-            selected->move(currentPoint - pressedPoint);
+            if(leftResize) {
+                selected->resize(currentPoint, 0);
+            } else if(rightResize) {
+                selected->resize(currentPoint, 1);
+            } else {
+                selected->move(currentPoint - pressedPoint);
+            }
         } else {
             creating = true;
             selected = new QtRectangle(pressedPoint, pressedPoint);
@@ -57,6 +72,17 @@ void CanvasWidget::mouseReleaseEvent(QMouseEvent *) {
     if(creating) {
         creating = false;
     }
+    update();
+    leftResize = false;
+    rightResize = false;
+}
+
+void CanvasWidget::keyPressEvent(QKeyEvent * event) {
+    selected = NULL;
+    update();
+}
+void CanvasWidget::keyReleaseEvent(QKeyEvent * event) {
+    selected = NULL;
     update();
 }
 
