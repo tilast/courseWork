@@ -1,6 +1,8 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
+#include <QMessageBox>
+
 #include <vector>
 #include <iostream>
 #include <algorithm>
@@ -9,6 +11,12 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
 {
     ui->setupUi(this);
     canvas = this->findChild<CanvasWidget*>("mainCanvas");
+
+    createActions();
+    createMenus();
+
+    setCurrentFile("");
+    setUnifiedTitleAndToolBarOnMac(true);
 }
 
 MainWindow::~MainWindow()
@@ -72,3 +80,92 @@ void MainWindow::deleteSelected()
 
     }
 }
+
+
+bool MainWindow::maybeSave() {
+    if (canvas->isModified()) {
+             QMessageBox::StandardButton ret;
+             ret = QMessageBox::warning(this, tr("Application"),
+                          tr("The document has been modified.\n"
+                             "Do you want to save your changes?"),
+                          QMessageBox::Save |
+                                        QMessageBox::Discard |
+                                        QMessageBox::Cancel);
+             if (ret == QMessageBox::Save)
+                 return save();
+             else if (ret == QMessageBox::Cancel)
+                 return false;
+         }
+         return true;
+
+}
+
+///////////////////////////////////////////////////////////////////
+//                                                               //
+//   UI SLOTS                                                    //
+//                                                               //
+///////////////////////////////////////////////////////////////////
+
+void MainWindow::createMenus() { qDebug() <<"menu creation"; }
+void MainWindow::createActions()
+{
+    qDebug() <<"actions creation";
+
+    newAct = this->findChild<QAction*>("actionNew");
+    connect(newAct,SIGNAL(triggered()),this,SLOT(newFile()));
+    openAct = this->findChild<QAction*>("actionOpen");
+    connect(openAct,SIGNAL(triggered()),this,SLOT(open()));
+
+    saveAct = this->findChild<QAction*>("actionSave");
+    connect(saveAct,SIGNAL(triggered()),this,SLOT(save()));
+    saveAsAct = this->findChild<QAction*>("actionSaveAs");
+    connect(saveAsAct,SIGNAL(triggered()),this,SLOT(saveAs()));
+
+    closeAct = this->findChild<QAction*>("actionClose");
+    connect(closeAct,SIGNAL(triggered()),this,SLOT(close()));
+    printAct = this->findChild<QAction*>("actionPrint");
+    connect(printAct,SIGNAL(triggered()),this,SLOT(print()));
+
+    undoAct = this->findChild<QAction*>("actionUndo");
+    connect(undoAct,SIGNAL(triggered()),this,SLOT(undo()));
+    redoAct = this->findChild<QAction*>("actionRedo");
+    connect(redoAct,SIGNAL(triggered()),this,SLOT(redo()));
+
+    cutAct = this->findChild<QAction*>("actionCut");
+    connect(cutAct,SIGNAL(triggered()),this,SLOT(cut()));
+    copyAct = this->findChild<QAction*>("actionCopy");
+    connect(copyAct,SIGNAL(triggered()),this,SLOT(copy()));
+    pasteAct = this->findChild<QAction*>("actionPaste");
+    connect(pasteAct,SIGNAL(triggered()),this,SLOT(paste()));
+
+    deleteAct = this->findChild<QAction*>("actionDelete");
+    connect(deleteAct,SIGNAL(triggered()),this,SLOT(deleteAction()));
+
+    selectAllAct = this->findChild<QAction*>("actionSelectAll");
+    connect(selectAllAct,SIGNAL(triggered()),this,SLOT(selectAll()));
+
+}
+void MainWindow::loadFile(const QString &fileName) { qDebug() <<"file loading"; }
+bool MainWindow::saveFile(const QString &fileName) { qDebug() <<"file saving"; }
+void MainWindow::setCurrentFile(const QString &fileName) { qDebug() <<"current file setting"; }
+
+void MainWindow::newFile() { qDebug() <<"new file"; }
+void MainWindow::open() {qDebug() <<"open file";}
+void MainWindow::close() {qDebug() <<"close file";}
+
+bool MainWindow::save() { qDebug() <<"save file";  return true;}
+bool MainWindow::saveAs() { qDebug() <<"saveAs file"; return true;}
+
+void MainWindow::print() { qDebug() <<"print file"; }
+
+void MainWindow::undo() { qDebug() <<"undo"; }
+void MainWindow::redo() { qDebug() <<"redo"; }
+
+void MainWindow::cut() { qDebug() <<"cut"; }
+void MainWindow::copy() { qDebug() <<"copy"; }
+void MainWindow::paste()  { qDebug() <<"paste"; }
+void MainWindow::selectAll()  { qDebug() <<"selectAll"; }
+
+void MainWindow::deleteAction()  { deleteSelected(); }
+
+void MainWindow::about()  { qDebug() <<"about"; }

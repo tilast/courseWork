@@ -19,6 +19,8 @@ public:
     std::vector<QtShape2D*> shapes;
     QtShape2D* selected;
 
+    bool isModified() { return __isModified; }
+
 signals:
     
 public slots:
@@ -39,6 +41,9 @@ protected:
     bool leftResize, rightResize;
 
     void toFront(int number);
+
+private:
+    bool __isModified;
 };
 
 #endif // CANVASWIDGET_H
