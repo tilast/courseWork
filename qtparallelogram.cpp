@@ -124,9 +124,16 @@ void QtParallelogram::setControlPoint(const float& cp) {
 void QtParallelogram::move(const Point2D& destination) {
     Parallelogram::move(destination);
 }
-void QtParallelogram::resize(const Point2D& destination, short type) {
-    Parallelogram::resize(destination, type);
+void QtParallelogram::resize(const Point2D& destination, short t) {
+    Parallelogram::resize(destination, t);
 }
 bool QtParallelogram::belongs(const Point2D& p) {
     return Parallelogram::belongs(p);
+}
+void QtParallelogram::setType() {
+    Parallelogram::setType();
+}
+
+int QtParallelogram::getType() {
+    return Parallelogram::getType();
 }

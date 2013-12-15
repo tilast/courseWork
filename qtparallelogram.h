@@ -15,7 +15,7 @@ public:
     Point2D getSize() const;
     void setBounds(const Point2D& p1, const Point2D& p2);
     void move(const Point2D& destination);
-    void resize(const Point2D& destination, short type);
+    void resize(const Point2D& destination, short t);
     bool belongs(const Point2D& point);
     void draw(QPainter & painter) const;
     void select(bool sel);
@@ -24,6 +24,8 @@ public:
     bool isBottomRight(Point2D pressedPoint, Point2D epsilon) const;
     bool isControlPoint(Point2D pressedPoint, Point2D epsilon) const;
     void setControlPoint(const float &cp);
+    void setType();
+    int getType();
 };
 
 #endif // QTPARALLELOGRAM_H

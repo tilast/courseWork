@@ -6,12 +6,19 @@ CanvasWidget::CanvasWidget(QWidget *parent) :
 {
     epsilon.x = 50;
     epsilon.y = 50;
+    creatingType = 1;
+    defaultOffsetParallelogram = 30.0;
 }
 
 CanvasWidget::~CanvasWidget() {
     for (unsigned i = 0; i < shapes.size(); i++) {
         delete shapes[i];
     }
+}
+
+void CanvasWidget::changeType(int type)
+{
+    creatingType = type;
 }
 
 void CanvasWidget::mousePressEvent(QMouseEvent *event) {
@@ -36,11 +43,11 @@ void CanvasWidget::mousePressEvent(QMouseEvent *event) {
                 rightResize = true;
             }
 
-//            if(selected->isParallelogram()) {
+            if(selected->getType() == 2) {
                 if(((QtParallelogram*)selected)->isControlPoint(pressedPoint, epsilon)) {
                     controlPointModify = true;
                 }
-//            }
+            }
 
             pressedPoint -= selected->getCenter();
             break;
@@ -68,7 +75,15 @@ void CanvasWidget::mouseMoveEvent(QMouseEvent *event) {
             }
         } else {
             creating = true;
-            selected = new QtParallelogram(pressedPoint, pressedPoint, 50.0);
+            switch(creatingType) {
+                case 2 :
+                    selected = new QtParallelogram(pressedPoint, pressedPoint, defaultOffsetParallelogram);
+                    break;
+                case 1:
+                    selected = new QtRectangle(pressedPoint, pressedPoint);
+                    break;
+            }
+
             shapes.push_back(selected);
             selected->select(true);
         }

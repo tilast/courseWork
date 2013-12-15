@@ -106,7 +106,11 @@ bool MainWindow::maybeSave() {
 //                                                               //
 ///////////////////////////////////////////////////////////////////
 
-void MainWindow::createMenus() { qDebug() <<"menu creation"; }
+void MainWindow::createMenus() {
+    qDebug() <<"menu creation";
+    connect(ui->takeRectangle, SIGNAL(clicked(bool)), this, SLOT(selectRectangle()));
+    connect(ui->takeParallelogram, SIGNAL(clicked(bool)), this, SLOT(selectParallelogram()));
+}
 void MainWindow::createActions()
 {
     qDebug() <<"actions creation";
@@ -169,3 +173,9 @@ void MainWindow::selectAll()  { qDebug() <<"selectAll"; }
 void MainWindow::deleteAction()  { deleteSelected(); }
 
 void MainWindow::about()  { qDebug() <<"about"; }
+void MainWindow::selectRectangle() {
+    canvas->changeType(1);
+}
+void MainWindow::selectParallelogram() {
+    canvas->changeType(2);
+}

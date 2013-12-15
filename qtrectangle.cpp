@@ -59,9 +59,16 @@ void QtRectangle::setBounds(const Point2D& p1, const Point2D& p2) {
 void QtRectangle::move(const Point2D& destination) {
     Rectangle::move(destination);
 }
-void QtRectangle::resize(const Point2D& destination, short type) {
-    Rectangle::resize(destination, type);
+void QtRectangle::resize(const Point2D& destination, short t) {
+    Rectangle::resize(destination, t);
 }
 bool QtRectangle::belongs(const Point2D& p) {
     return Rectangle::belongs(p);
+}
+void QtRectangle::setType() {
+    Rectangle::setType();
+}
+
+int QtRectangle::getType() {
+    return Rectangle::getType();
 }

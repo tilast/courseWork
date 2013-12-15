@@ -19,11 +19,13 @@ public:
 
     std::vector<QtShape2D*> shapes;
     QtShape2D* selected;
+    int creatingType;
+    float defaultOffsetParallelogram;
 
     bool isModified() { return __isModified; }
+    void changeType(int type);
 
 signals:
-    
 public slots:
 
 protected:
