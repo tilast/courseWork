@@ -24,8 +24,13 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+void MainWindow::keyReleaseEvent(QKeyEvent * event) {
+    canvas->pressedKeyCode = 0;
+}
+
 void MainWindow::keyPressEvent(QKeyEvent* event)
 {
+    canvas->pressedKeyCode = event->key();
     switch (event->key())
       {
         case Qt::Key_Return:
@@ -41,12 +46,12 @@ void MainWindow::keyPressEvent(QKeyEvent* event)
         case Qt::Key_Delete:
         case Qt::Key_Backspace: {
 
-///////////////////////////////////////////////////////////////////
-//                                                               //
-//   Press Delete button. We you this event to delete selected   //
-//   object, for example.                                        //
-//                                                               //
-///////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////
+////                                                               //
+////   Press Delete button. We you this event to delete selected   //
+////   object, for example.                                        //
+////                                                               //
+/////////////////////////////////////////////////////////////////////
 
         qDebug() <<"------------------ (deleting shape)";
         deleteSelected();
@@ -62,23 +67,19 @@ void MainWindow::keyPressEvent(QKeyEvent* event)
 }
 void MainWindow::deleteSelected()
 {
-    std::vector< QtShape2D* > *shapes = &canvas->shapes;
-    QtShape2D *selectedShape = canvas->selected;
-
-    qDebug() <<"Selected shape: "<<selectedShape;
-
-    std::vector< QtShape2D* >::iterator itemItr = std::find(shapes->begin(), shapes->end(), selectedShape); //Searching
-
-    if (itemItr != shapes->end()) {
-        shapes->erase(itemItr);
-        update();
-        qDebug() <<"Item found";
-
-    } else {
-
-        qDebug() <<"Item not found";
-
+    shapesContainer *shapes = &canvas->shapes;
+    selectedShapesContainer *selectedShapes = &canvas->selectedShapes;
+    qDebug() <<"To delete: "<<selectedShapes->size();
+    for(selectedShapesContainer::const_iterator it = selectedShapes->begin(); it != selectedShapes->end(); it++) {
+        shapesContainer::iterator itemItr = std::find(shapes->begin(), shapes->end(), *it); //Searching
+        if (itemItr != shapes->end()) {
+            shapes->erase(itemItr);
+            qDebug() <<"Item found";
+        } else {
+            qDebug() <<"Item not found";
+        }
     }
+                update();
 }
 
 
@@ -166,6 +167,6 @@ void MainWindow::copy() { qDebug() <<"copy"; }
 void MainWindow::paste()  { qDebug() <<"paste"; }
 void MainWindow::selectAll()  { qDebug() <<"selectAll"; }
 
-void MainWindow::deleteAction()  { deleteSelected(); }
+void MainWindow::deleteAction()  { qDebug() <<"delete"; deleteSelected(); }
 
 void MainWindow::about()  { qDebug() <<"about"; }

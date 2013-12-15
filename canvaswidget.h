@@ -5,9 +5,15 @@
 #include <QMouseEvent>
 #include <QKeyEvent>
 #include <QPaintEvent>
+#include <QDebug>
+
 #include <vector>
+#include <set>
 #include "qtshape.h"
 #include "qtrectangle.h"
+
+typedef std::vector<QtShape2D*> shapesContainer;
+typedef std::set<QtShape2D*> selectedShapesContainer;
 
 class CanvasWidget : public QWidget
 {
@@ -16,8 +22,12 @@ public:
     explicit CanvasWidget(QWidget *parent = 0);
     ~CanvasWidget();
 
-    std::vector<QtShape2D*> shapes;
+    shapesContainer shapes;
+    selectedShapesContainer selectedShapes;
+
     QtShape2D* selected;
+
+    int pressedKeyCode;
 
     bool isModified() { return __isModified; }
 
@@ -31,9 +41,6 @@ protected:
     virtual void mouseMoveEvent(QMouseEvent * event);
     virtual void mouseReleaseEvent(QMouseEvent * event);
     virtual void paintEvent(QPaintEvent * event);
-
-    virtual void keyPressEvent(QKeyEvent *);
-    virtual void keyReleaseEvent(QKeyEvent *);
 
     Point2D pressedPoint, epsilon;
     bool creating;
