@@ -36,6 +36,7 @@ private slots:
     bool save();
     bool saveAs();
 
+    bool exportSVG();
     void print();
 
     void undo();
@@ -59,14 +60,19 @@ private:
 
     void createMenus();
     void createActions();
-    void loadFile(const QString &fileName);
 
-    bool maybeSave();
+    QString loadFileText(const QString &fileName);
+    bool parseXMLForSVG(const QString &filename);
 
-    const QString svgImageCode();
+    QString loadFileNameDialog();
+    bool haveToSave();
 
-    bool saveFile(QString fileName);
+    //Coding of data
+    const QString svgImageCode(shapesContainer *container);
 
+    bool saveFileByData(QString fileName);
+    bool saveFileByText(QString fileName, QString text);
+    QString saveFileNameDialog();
     void setCurrentFile(const QString &fileName);
 
     QMenu *fileMenu;
@@ -76,6 +82,9 @@ private:
     QAction *openAct;
     QAction *saveAct;
     QAction *saveAsAct;
+
+    QAction *exportSVGAct;
+
     QAction *closeAct;
     QAction *printAct;
 

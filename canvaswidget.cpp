@@ -21,6 +21,7 @@ void CanvasWidget::selectAll() {
 }
 
 void CanvasWidget::mousePressEvent(QMouseEvent *event) {
+
     pressedPoint.x = event->localPos().x();
     pressedPoint.y = event->localPos().y();
 
@@ -57,6 +58,7 @@ void CanvasWidget::mousePressEvent(QMouseEvent *event) {
 }
 
 void CanvasWidget::mouseMoveEvent(QMouseEvent *event) {
+
     if((event->buttons()) & Qt::LeftButton) {
         Point2D currentPoint;
         currentPoint.x = event->localPos().x();
@@ -77,6 +79,9 @@ void CanvasWidget::mouseMoveEvent(QMouseEvent *event) {
             selected = new QtRectangle(pressedPoint, pressedPoint);
             shapes.push_back(selected);
             selected->select(true);
+
+            /////////////////
+            setModified(true);
         }
 
         update();
@@ -84,6 +89,7 @@ void CanvasWidget::mouseMoveEvent(QMouseEvent *event) {
 }
 
 void CanvasWidget::mouseReleaseEvent(QMouseEvent *) {
+
     if(creating) {
         creating = false;
         selected->select(false);
@@ -109,4 +115,7 @@ void CanvasWidget::toFront(int number) {
     QtShape2D* tmp = shapes[number];
     shapes[number] = shapes[top];
     shapes[top] = tmp;
+
+    /////////////////
+    setModified(true);
 }
