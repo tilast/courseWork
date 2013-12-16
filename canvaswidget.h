@@ -11,6 +11,7 @@
 #include <set>
 #include "qtshape.h"
 #include "qtrectangle.h"
+#include "qtparallelogram.h"
 
 typedef std::vector<QtShape2D*> shapesContainer;
 typedef std::set<QtShape2D*> selectedShapesContainer;
@@ -26,14 +27,16 @@ public:
     selectedShapesContainer selectedShapes;
 
     QtShape2D* selected;
+    int creatingType;
+    float defaultOffsetParallelogram;
 
-    int pressedKeyCode;
-
+    void changeType(int type);
     bool isModified() { return __isModified; }
     void setModified(bool flag) { __isModified = flag; }
     void selectAll();
-signals:
-    void modified();
+    int pressedKeyCode;
+signals:    
+void modified();
 
 public slots:
 
@@ -47,7 +50,7 @@ protected:
     Point2D pressedPoint, epsilon;
     bool creating;
 
-    bool leftResize, rightResize;
+    bool leftResize, rightResize, controlPointModify;
 
     void toFront(int number);
 

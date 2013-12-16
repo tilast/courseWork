@@ -1,10 +1,13 @@
 #include "canvaswidget.h"
 
+#include <QDebug>
 CanvasWidget::CanvasWidget(QWidget *parent) :
     QWidget(parent), selected(NULL), creating(false)
 {
     epsilon.x = 50;
     epsilon.y = 50;
+    creatingType = 1;
+    defaultOffsetParallelogram = 30.0;
 }
 
 CanvasWidget::~CanvasWidget() {
@@ -13,12 +16,15 @@ CanvasWidget::~CanvasWidget() {
     }
 }
 
+void CanvasWidget::changeType(int type)
+{
+    creatingType = type;
+}
 void CanvasWidget::selectAll() {
     selectedShapes.clear();
-    for(auto iter = shapes.begin(); iter != shapes.end(); iter++) {
+    for(shapesContainer::iterator iter = shapes.begin(); iter != shapes.end(); iter++) {
         selectedShapes.insert(*iter);
-    }
-}
+    }}
 
 void CanvasWidget::mousePressEvent(QMouseEvent *event) {
 
@@ -51,6 +57,12 @@ void CanvasWidget::mousePressEvent(QMouseEvent *event) {
                 rightResize = true;
             }
 
+            if(selected->getType() == 2) {
+                if(((QtParallelogram*)selected)->isControlPoint(pressedPoint, epsilon)) {
+                    controlPointModify = true;
+                }
+            }
+
             pressedPoint -= selected->getCenter();
             break;
         }
@@ -71,12 +83,22 @@ void CanvasWidget::mouseMoveEvent(QMouseEvent *event) {
                 selected->resize(currentPoint, 0);
             } else if(rightResize) {
                 selected->resize(currentPoint, 1);
+            } else if(controlPointModify) {
+                ((QtParallelogram*)selected)->setControlPoint(currentPoint.x);
             } else {
                 selected->move(currentPoint - pressedPoint);
             }
         } else {
             creating = true;
-            selected = new QtRectangle(pressedPoint, pressedPoint);
+            switch(creatingType) {
+                case 2 :
+                    selected = new QtParallelogram(pressedPoint, pressedPoint, defaultOffsetParallelogram);
+                    break;
+                case 1:
+                    selected = new QtRectangle(pressedPoint, pressedPoint);
+                    break;
+            }
+
             shapes.push_back(selected);
             selected->select(true);
 
@@ -99,6 +121,7 @@ void CanvasWidget::mouseReleaseEvent(QMouseEvent *) {
     update();
     leftResize = false;
     rightResize = false;
+    controlPointModify = false;
 }
 
 void CanvasWidget::paintEvent(QPaintEvent *) {

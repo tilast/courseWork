@@ -132,10 +132,10 @@ shapesContainer MainWindow::parseXMLFileForSVG(const QString &filename)
                 if (xml.name() == "svg")
                     continue;
                 if (xml.name() == "rect") {
-                    double height = xml.attributes().value("height").toDouble();
-                    double width = xml.attributes().value("width").toDouble();
-                    double x = xml.attributes().value("x").toDouble();
-                    double y = xml.attributes().value("y").toDouble();
+                    double height = xml.attributes().value("height").toString().toDouble();
+                    double width = xml.attributes().value("width").toString().toDouble();
+                    double x = xml.attributes().value("x").toString().toDouble();
+                    double y = xml.attributes().value("y").toString().toDouble();
                     Point2D first(x,y);
                     Point2D second(x+width,y+height);
 
@@ -268,7 +268,7 @@ bool MainWindow::saveFileByData(QString fileName)
             return false;
         }
         QDataStream out(&file);
-            out.setVersion(QDataStream::Qt_5_1);
+            out.setVersion(QDataStream::Qt_5_0);
             out <<canvas->shapes.data();
     }
 
@@ -281,7 +281,11 @@ bool MainWindow::saveFileByData(QString fileName)
 //                                                               //
 ///////////////////////////////////////////////////////////////////
 
-void MainWindow::createMenus() { qDebug() <<"menu creation"; }
+void MainWindow::createMenus() {
+    qDebug() <<"menu creation";
+    connect(ui->takeRectangle, SIGNAL(clicked(bool)), this, SLOT(selectRectangle()));
+    connect(ui->takeParallelogram, SIGNAL(clicked(bool)), this, SLOT(selectParallelogram()));
+}
 void MainWindow::createActions()
 {
     newAct = this->findChild<QAction*>("actionNew");
@@ -375,3 +379,9 @@ void MainWindow::selectAll()  {
 void MainWindow::deleteAction()  { qDebug() <<"delete"; deleteSelected(); }
 
 void MainWindow::about()  { qDebug() <<"about"; }
+void MainWindow::selectRectangle() {
+    canvas->changeType(1);
+}
+void MainWindow::selectParallelogram() {
+    canvas->changeType(2);
+}

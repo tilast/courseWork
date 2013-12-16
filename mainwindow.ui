@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>676</width>
-    <height>487</height>
+    <width>748</width>
+    <height>583</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -23,27 +23,52 @@
    <bool>true</bool>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <widget class="CanvasWidget" name="mainCanvas" native="true">
+   <widget class="QWidget" name="verticalLayoutWidget">
     <property name="geometry">
      <rect>
-      <x>0</x>
-      <y>0</y>
-      <width>779</width>
-      <height>429</height>
+      <x>10</x>
+      <y>10</y>
+      <width>761</width>
+      <height>451</height>
      </rect>
     </property>
-    <property name="sizePolicy">
-     <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
-      <horstretch>0</horstretch>
-      <verstretch>0</verstretch>
-     </sizepolicy>
+    <layout class="QVBoxLayout" name="verticalLayout">
+     <item>
+      <widget class="CanvasWidget" name="mainCanvas" native="true"/>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QWidget" name="layoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>470</y>
+      <width>233</width>
+      <height>24</height>
+     </rect>
     </property>
-    <property name="autoFillBackground">
-     <bool>false</bool>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">background-color: red;</string>
-    </property>
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <widget class="QRadioButton" name="takeRectangle">
+       <property name="cursor">
+        <cursorShape>PointingHandCursor</cursorShape>
+       </property>
+       <property name="text">
+        <string>Rectangle</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QRadioButton" name="takeParallelogram">
+       <property name="cursor">
+        <cursorShape>PointingHandCursor</cursorShape>
+       </property>
+       <property name="text">
+        <string>Parallelogram</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menuBar">
@@ -51,8 +76,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>676</width>
-     <height>22</height>
+     <width>748</width>
+     <height>25</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu_File">

@@ -52,6 +52,9 @@ private slots:
 
     void about();
 
+    void selectRectangle();
+    void selectParallelogram();
+
 private:
     Ui::MainWindow *ui;
     CanvasWidget *canvas;
