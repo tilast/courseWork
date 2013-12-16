@@ -26,6 +26,7 @@ public:
     void setControlPoint(const float &cp);
     void setType();
     int getType();
+    virtual QString svgElementCode() const;
 };
 
 #endif // QTPARALLELOGRAM_H

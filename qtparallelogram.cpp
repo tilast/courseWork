@@ -137,3 +137,6 @@ void QtParallelogram::setType() {
 int QtParallelogram::getType() {
     return Parallelogram::getType();
 }
+QString QtParallelogram::svgElementCode() const {
+    return QString("");
+}

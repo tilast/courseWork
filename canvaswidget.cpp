@@ -22,9 +22,9 @@ void CanvasWidget::changeType(int type)
 }
 void CanvasWidget::selectAll() {
     selectedShapes.clear();
-    for(auto iter = shapes.begin(); iter != shapes.end(); iter++) {
+    for(shapesContainer::iterator iter = shapes.begin(); iter != shapes.end(); iter++) {
         selectedShapes.insert(*iter);
-    }
+    }}
 
 void CanvasWidget::mousePressEvent(QMouseEvent *event) {
 
