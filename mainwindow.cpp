@@ -124,14 +124,14 @@ bool MainWindow::parseXMLForSVG(const QString &filename)
                 if (xml.name() == "svg")
                     continue;
                 if (xml.name() == "rect") {
-//                    double height = xml.attributes().value("height").toDouble();
-//                    double width = xml.attributes().value("width").toDouble();
-//                    double x = xml.attributes().value("x").toDouble();
-//                    double y = xml.attributes().value("y").toDouble();
-//                    Point2D first(x,y);
-//                    Point2D second(x+width,y+height);
+                    double height = xml.attributes().value("height").toString().toDouble();
+                    double width = xml.attributes().value("width").toString().toDouble();
+                    double x = xml.attributes().value("x").toString().toDouble();
+                    double y = xml.attributes().value("y").toString().toDouble();
+                    Point2D first(x,y);
+                    Point2D second(x+width,y+height);
 
-//                    canvas->shapes.push_back(new QtRectangle(first, second));
+                    canvas->shapes.push_back(new QtRectangle(first, second));
                 }
             }
         }
