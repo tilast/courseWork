@@ -10,6 +10,8 @@
 #include <QKeyEvent>
 #include <QClipboard>
 
+enum Instruments {CURSOR = 0,MOVE = 1, FIGURE = 2};
+
 namespace Ui {
 class MainWindow;
 }
@@ -55,9 +57,13 @@ private slots:
     void selectRectangle();
     void selectParallelogram();
 
+    void selectMove() { instrument = MOVE;  }
+    void selectCursor() { instrument = CURSOR; }
+
 private:
     Ui::MainWindow *ui;
     CanvasWidget *canvas;
+    Instruments instrument;
 
     void setTextToClipboard(const QString &text);
     const QString getTextToClipboard();

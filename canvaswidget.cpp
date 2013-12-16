@@ -57,7 +57,7 @@ void CanvasWidget::mousePressEvent(QMouseEvent *event) {
     pressedPoint.y = event->localPos().y();
 
     selected = NULL;
-    transformation = MOVING;
+    transformation = NONE;
     for(unsigned i = shapes.size(); i > 0; i--) {
         if(shapes[i - 1]->belongs(pressedPoint)) {
             //Нажали на фигуру
@@ -75,12 +75,6 @@ void CanvasWidget::mousePressEvent(QMouseEvent *event) {
 
             if (transformation == LEFT_RESIZE || transformation == RIGHT_RESIZE) //Оставляем только одну выделенную фигуру6 которую хотим масштабировать
                 clearSelectedShapes();
-
-//            if (havingShapeInSelectedShapes(selected))
-//                transformation = MOVING;
-//            else
-             if (!isKeyPressed(Qt::Key_Control))
-                 clearSelectedShapes();
 
              insertShapeInSelectedShapes(selected);
 

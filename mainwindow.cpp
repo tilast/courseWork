@@ -299,6 +299,8 @@ void MainWindow::createMenus() {
     qDebug() <<"menu creation";
     connect(ui->takeRectangle, SIGNAL(clicked(bool)), this, SLOT(selectRectangle()));
     connect(ui->takeParallelogram, SIGNAL(clicked(bool)), this, SLOT(selectParallelogram()));
+    connect(ui->move, SIGNAL(clicked()), this, SLOT(selectMove()));
+    connect(ui->cursor, SIGNAL(clicked()), this, SLOT(selectCursor()));
 }
 void MainWindow::createActions()
 {
@@ -420,7 +422,9 @@ void MainWindow::deleteAction()
 void MainWindow::about()  { qDebug() <<"about"; }
 void MainWindow::selectRectangle() {
     canvas->changeType(1);
+    instrument = FIGURE;
 }
 void MainWindow::selectParallelogram() {
     canvas->changeType(2);
+    instrument = FIGURE;
 }
