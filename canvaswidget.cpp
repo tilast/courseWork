@@ -2,7 +2,7 @@
 
 #include <QDebug>
 CanvasWidget::CanvasWidget(QWidget *parent) :
-    QWidget(parent), selected(NULL), creating(false)
+    QWidget(parent), selected(NULL), transformation(NONE)
 {
     epsilon.x = 50;
     epsilon.y = 50;
@@ -21,41 +21,55 @@ void CanvasWidget::changeType(int type)
     creatingType = type;
 }
 
-void CanvasWidget::selectAll() {
+void CanvasWidget::clearSelectedShapes()
+{
+    for(const auto &shape: shapes) {
+        (&*shape)->select(false);
+    }
     selectedShapes.clear();
-    for(shapesContainer::iterator iter = shapes.begin(); iter != shapes.end(); iter++) {
-        selectedShapes.insert(*iter);
-    }}
+}
+void CanvasWidget::insertShapeInSelectedShapes(QtShape2D* shape)
+{
+    shape->select(true);
+    selectedShapes.insert(shape);
+}
+
+void CanvasWidget::selectAll()
+{
+    clearSelectedShapes();
+    for(const auto &shape: shapes) {
+        (&*shape)->select(true);
+        selectedShapes.insert(&*shape);
+    }
+    update();
+}
 
 void CanvasWidget::mousePressEvent(QMouseEvent *event) {
 
     pressedPoint.x = event->localPos().x();
     pressedPoint.y = event->localPos().y();
 
-    if(selected && keyPressed(Qt::Key_Control)) {
-        selected->select(false);
-    }
+//    if(selected && keyPressed(Qt::Key_Control)) {
+//        selected->select(false);
+//    }
     selected = NULL;
 
     for(unsigned i = shapes.size(); i > 0; i--) {
         if(shapes[i - 1]->belongs(pressedPoint)) {
-            toFront(i - 1);
+            //Нажали на фигуру
+            toFront(i - 1); //переместилю фигуру вперед
+//            moving = true; //Думаем, что может быть перемещение
+            selected = shapes[shapes.size() - 1]; //Запоминаем последню выбранную фигуры
 
-            selected = shapes[shapes.size() - 1];
-            selected->select(true);
-
-            //Если не нажата клавиша CTRL, то выделение снимается, а выделяется только один элемент
-            if(keyPressed(Qt::Key_Control))
-                selectedShapes.clear();
-
-            selectedShapes.insert(selected);
-
-            qDebug() <<selectedShapes.size();
+            //Если не нажата клавиша CTRL, то выделение снимается, а выделяется только один элемент или добавляем еще один элемент к списку выделенных фигур
+            if(!isKeyPressed(Qt::Key_Control))
+                clearSelectedShapes();
+            insertShapeInSelectedShapes(selected);
 
             if(selected->isTopLeft(pressedPoint, epsilon)) {
-                leftResize = true;
-            } else if(selected->isBottomRight(pressedPoint, epsilon)) {
-                rightResize = true;
+                transformation = LEFT_RESIZE;
+            } else if(selected->isBottomRight(pressedPoint, epsilon)){
+                transformation = RIGHT_RESIZE;
             }
 
             if(selected->getType() == 2) {
@@ -68,6 +82,9 @@ void CanvasWidget::mousePressEvent(QMouseEvent *event) {
             break;
         }
     }
+    if (selected == NULL)
+        clearSelectedShapes();
+
 }
 
 void CanvasWidget::mouseMoveEvent(QMouseEvent *event) {
@@ -77,20 +94,24 @@ void CanvasWidget::mouseMoveEvent(QMouseEvent *event) {
         currentPoint.x = event->localPos().x();
         currentPoint.y = event->localPos().y();
 
-        if(creating) {
+        if(transformation == CREATING) {
             shapes.back()->setBounds(pressedPoint, currentPoint);
         } else if(selected) {
-            if(leftResize) {
+            if(transformation == LEFT_RESIZE) {
                 selected->resize(currentPoint, 0);
-            } else if(rightResize) {
+            } else if(transformation == RIGHT_RESIZE) {
                 selected->resize(currentPoint, 1);
             } else if(controlPointModify) {
                 ((QtParallelogram*)selected)->setControlPoint(currentPoint.x);
             } else {
-                selected->move(currentPoint - pressedPoint);
+                for(const auto &shape: selectedShapes) //foreach Loop
+                {
+                    (&*shape)->move((&*shape)->getCenter()-selected->getCenter() + currentPoint - pressedPoint);
+                }
+//
             }
         } else {
-            creating = true;
+            transformation = CREATING;
             switch(creatingType) {
                 case 2 :
                     selected = new QtParallelogram(pressedPoint, pressedPoint, defaultOffsetParallelogram);
@@ -113,16 +134,13 @@ void CanvasWidget::mouseMoveEvent(QMouseEvent *event) {
 
 void CanvasWidget::mouseReleaseEvent(QMouseEvent *) {
 
-    if(creating) {
-        creating = false;
-        selected->select(false);
-        selected = NULL;
+    if(transformation == CREATING) {
+        insertShapeInSelectedShapes(selected);
     }
 
     update();
-    leftResize = false;
-    rightResize = false;
     controlPointModify = false;
+    transformation = NONE;
 }
 
 void CanvasWidget::paintEvent(QPaintEvent *) {

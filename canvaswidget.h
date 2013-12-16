@@ -16,6 +16,8 @@
 typedef std::vector<QtShape2D*> shapesContainer;
 typedef std::set<QtShape2D*> selectedShapesContainer;
 
+enum CanvasWidgetActionType {NONE = 0,CREATING = 1, MOVING = 2, LEFT_RESIZE = 3, RIGHT_RESIZE = 4, CONTROL_POINT_MODIFY = 5};
+
 class CanvasWidget : public QWidget
 {
     Q_OBJECT
@@ -25,6 +27,9 @@ public:
 
     shapesContainer shapes;
     selectedShapesContainer selectedShapes;
+
+    void clearSelectedShapes();
+    void insertShapeInSelectedShapes(QtShape2D* shape);
 
     QtShape2D* selected;
     int creatingType;
@@ -48,15 +53,16 @@ protected:
     virtual void paintEvent(QPaintEvent * event);
 
     Point2D pressedPoint, epsilon;
-    bool creating;
 
-    bool leftResize, rightResize, controlPointModify;
+    CanvasWidgetActionType transformation;
+
+    bool controlPointModify;
 
     void toFront(int number);
 
 private:
     bool __isModified;
-    bool keyPressed(Qt::Key keyCode) { return (pressedKeyCode == 0 || pressedKeyCode != keyCode); }
+    bool isKeyPressed(Qt::Key keyCode) { return (pressedKeyCode != 0 && pressedKeyCode == keyCode); }
 };
 
 #endif // CANVASWIDGET_H
