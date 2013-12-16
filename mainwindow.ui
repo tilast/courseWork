@@ -38,35 +38,57 @@
      </item>
     </layout>
    </widget>
-   <widget class="QWidget" name="layoutWidget">
+   <widget class="QWidget" name="horizontalLayoutWidget">
     <property name="geometry">
      <rect>
       <x>10</x>
       <y>470</y>
-      <width>233</width>
-      <height>24</height>
+      <width>731</width>
+      <height>51</height>
      </rect>
     </property>
-    <layout class="QHBoxLayout" name="horizontalLayout">
+    <layout class="QHBoxLayout" name="horizontalLayout_2">
      <item>
-      <widget class="QRadioButton" name="takeRectangle">
-       <property name="cursor">
-        <cursorShape>PointingHandCursor</cursorShape>
-       </property>
-       <property name="text">
-        <string>Rectangle</string>
-       </property>
-      </widget>
+      <layout class="QHBoxLayout" name="transformations">
+       <item>
+        <widget class="QRadioButton" name="cursor">
+         <property name="text">
+          <string>Cursor</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QRadioButton" name="move">
+         <property name="text">
+          <string>Move</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
      </item>
      <item>
-      <widget class="QRadioButton" name="takeParallelogram">
-       <property name="cursor">
-        <cursorShape>PointingHandCursor</cursorShape>
-       </property>
-       <property name="text">
-        <string>Parallelogram</string>
-       </property>
-      </widget>
+      <layout class="QHBoxLayout" name="shapes">
+       <item>
+        <widget class="QRadioButton" name="takeParallelogram">
+         <property name="cursor">
+          <cursorShape>PointingHandCursor</cursorShape>
+         </property>
+         <property name="text">
+          <string>Parallelogram</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QRadioButton" name="takeRectangle">
+         <property name="cursor">
+          <cursorShape>PointingHandCursor</cursorShape>
+         </property>
+         <property name="text">
+          <string>Rectangle</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
      </item>
     </layout>
    </widget>
@@ -77,7 +99,7 @@
      <x>0</x>
      <y>0</y>
      <width>748</width>
-     <height>25</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu_File">
