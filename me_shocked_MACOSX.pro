@@ -5,6 +5,7 @@
 #-------------------------------------------------
 
 QT       += core gui
+QT       += xml
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -19,7 +20,10 @@ SOURCES += main.cpp\
     shape.cpp \
     rectangle.cpp \
     qtrectangle.cpp \
-    canvaswidget.cpp
+    canvaswidget.cpp \
+    qtparallelogram.cpp \
+    parallelogram.cpp \
+    qsvgparser.cpp
 
 HEADERS  += mainwindow.h \
     base.h \
@@ -28,6 +32,9 @@ HEADERS  += mainwindow.h \
     rectangle.h \
     qtshape.h \
     qtrectangle.h \
-    canvaswidget.h
+    canvaswidget.h \
+    qtparallelogram.h \
+    parallelogram.h \
+    qsvgparser.h
 
 FORMS    += mainwindow.ui

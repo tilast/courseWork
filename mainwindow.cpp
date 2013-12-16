@@ -5,6 +5,8 @@
 #include <QFileDialog>
 #include <QXmlStreamReader>
 
+#include <QtXml/qdom.h>
+
 #include <vector>
 #include <iostream>
 #include <algorithm>
@@ -82,6 +84,17 @@ void MainWindow::deleteSelected()
                 update();
 }
 
+void MainWindow::setTextToClipboard(const QString &text)
+{
+    qDebug() <<"Save to clipboard: "<<text;
+    QApplication::clipboard()->setText(text);
+}
+
+const QString MainWindow::getTextToClipboard()
+{
+    return QApplication::clipboard()->text();
+}
+
 void MainWindow::setCurrentFile(const QString &filename)
 {
     curFileName = filename;
@@ -149,33 +162,34 @@ shapesContainer MainWindow::parseXMLFileForSVG(const QString &filename)
 shapesContainer MainWindow::parseXMLTextForSVG(const QString &svgText)
 {
     shapesContainer newContainer;
-
     if (svgText.isEmpty())
         return newContainer;
+    qDebug() <<"parseSVGText: "<<svgText;
+    QDomDocument doc;
+    doc.setContent(svgText);
+    QDomElement docElem = doc.documentElement();
+    QDomNode n = docElem.firstChild();
+      while( !n.isNull() ) {
+          QDomElement e = n.toElement(); // try to convert the node to an element.
+          if( !e.isNull() ) { // the node was really an element.
+              QString tagName = e.tagName();
+              if (tagName == "rect") {
+                  double height = e.attribute("height").toDouble();
+                  double width = e.attribute("width").toDouble();
+                  double x = e.attribute("x").toDouble();
+                  double y = e.attribute("y").toDouble();
+                  Point2D first(x,y);
+                  Point2D second(x+width,y+height);
 
-//    QXmlStreamReader xml(file);
+                  newContainer.push_back(new QtRectangle(first, second));
+              }
+          }
+          n = n.nextSibling();
+      }
 
-//    while (!xml.atEnd() && !xml.hasError())
-//        {
-//            QXmlStreamReader::TokenType token = xml.readNext();
-//            if (token == QXmlStreamReader::StartDocument)
-//                continue;
-//            if (token == QXmlStreamReader::StartElement)
-//            {
-//                if (xml.name() == "svg")
-//                    continue;
-//                if (xml.name() == "rect") {
-//                    double height = xml.attributes().value("height").toDouble();
-//                    double width = xml.attributes().value("width").toDouble();
-//                    double x = xml.attributes().value("x").toDouble();
-//                    double y = xml.attributes().value("y").toDouble();
-//                    Point2D first(x,y);
-//                    Point2D second(x+width,y+height);
+//    qDebug() <<doc.firstChild().nodeValue();
+//    QString helloWorld=list.at(0).toElement().text();
 
-//                    newContainer.push_back(new QtRectangle(first, second));
-//                }
-//            }
-//        }
     return newContainer;
 }
 
@@ -355,7 +369,7 @@ bool MainWindow::saveAs()
     if (newFileName.isEmpty())
         return false;
     setCurrentFile(newFileName);
-    save();
+    return save();
 }
 
 bool MainWindow::exportSVG()
@@ -369,14 +383,39 @@ void MainWindow::print() { qDebug() <<"print file"; }
 void MainWindow::undo() { qDebug() <<"undo"; }
 void MainWindow::redo() { qDebug() <<"redo"; }
 
-void MainWindow::cut() { qDebug() <<"cut"; }
-void MainWindow::copy() { qDebug() <<"copy"; }
-void MainWindow::paste()  { qDebug() <<"paste"; }
-void MainWindow::selectAll()  {
+void MainWindow::cut()
+{
+    qDebug() <<"cut";
+    copy();
+    deleteSelected();
+}
+void MainWindow::copy()
+{
+    qDebug() <<"copy";
+    shapesContainer output(canvas->selectedShapes.begin(), canvas->selectedShapes.end());
+    QString svgToClipboard = svgImageCode(&output);
+    setTextToClipboard(svgToClipboard);
+}
+void MainWindow::paste()
+{
+    qDebug() <<"paste";
+    QString clipText = getTextToClipboard();
+    shapesContainer newShapes = parseXMLTextForSVG(clipText);
+    canvas->shapes.insert(canvas->shapes.end(),newShapes.begin(), newShapes.end());
+
+    update();
+
+
+}
+void MainWindow::selectAll()
+{
     canvas->selectAll();
 }
 
-void MainWindow::deleteAction()  { qDebug() <<"delete"; deleteSelected(); }
+void MainWindow::deleteAction()
+{
+    deleteSelected();
+}
 
 void MainWindow::about()  { qDebug() <<"about"; }
 void MainWindow::selectRectangle() {

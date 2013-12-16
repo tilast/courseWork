@@ -8,7 +8,7 @@
 
 #include <QDebug>
 #include <QKeyEvent>
-
+#include <QClipboard>
 
 namespace Ui {
 class MainWindow;
@@ -58,6 +58,9 @@ private slots:
 private:
     Ui::MainWindow *ui;
     CanvasWidget *canvas;
+
+    void setTextToClipboard(const QString &text);
+    const QString getTextToClipboard();
 
     QString curFileName;
     void setCurrentFile(const QString &filename);

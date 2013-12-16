@@ -20,6 +20,7 @@ void CanvasWidget::changeType(int type)
 {
     creatingType = type;
 }
+
 void CanvasWidget::selectAll() {
     selectedShapes.clear();
     for(shapesContainer::iterator iter = shapes.begin(); iter != shapes.end(); iter++) {
