@@ -34,6 +34,13 @@ void CanvasWidget::insertShapeInSelectedShapes(QtShape2D* shape)
     selectedShapes.insert(shape);
 }
 
+bool CanvasWidget::havingShapeInSelectedShapes(QtShape2D* shape) {
+    size_t oldSize = selectedShapes.size();
+    selectedShapesContainer tmpCont = selectedShapes;
+    tmpCont.insert(shape);
+    return oldSize == tmpCont.size();
+}
+
 void CanvasWidget::selectAll()
 {
     clearSelectedShapes();
@@ -49,28 +56,30 @@ void CanvasWidget::mousePressEvent(QMouseEvent *event) {
     pressedPoint.x = event->localPos().x();
     pressedPoint.y = event->localPos().y();
 
-//    if(selected && keyPressed(Qt::Key_Control)) {
-//        selected->select(false);
-//    }
     selected = NULL;
-
+    transformation = NONE;
     for(unsigned i = shapes.size(); i > 0; i--) {
         if(shapes[i - 1]->belongs(pressedPoint)) {
             //Нажали на фигуру
             toFront(i - 1); //переместилю фигуру вперед
-//            moving = true; //Думаем, что может быть перемещение
             selected = shapes[shapes.size() - 1]; //Запоминаем последню выбранную фигуры
 
-            //Если не нажата клавиша CTRL, то выделение снимается, а выделяется только один элемент или добавляем еще один элемент к списку выделенных фигур
-            if(!isKeyPressed(Qt::Key_Control))
-                clearSelectedShapes();
-            insertShapeInSelectedShapes(selected);
-
+            //Проверяем нажатие на контроллер масштабирования (левый верхний)
             if(selected->isTopLeft(pressedPoint, epsilon)) {
                 transformation = LEFT_RESIZE;
-            } else if(selected->isBottomRight(pressedPoint, epsilon)){
+            }
+            //Проверяем нажатие на контроллек масштабирования (правый нижний)
+            else if(selected->isBottomRight(pressedPoint, epsilon)){
                 transformation = RIGHT_RESIZE;
             }
+
+            if (transformation == LEFT_RESIZE || transformation == RIGHT_RESIZE) //Оставляем только одну выделенную фигуру6 которую хотим масштабировать
+                clearSelectedShapes();
+
+            if (havingShapeInSelectedShapes(selected))
+                transformation = MOVING;
+            else
+                insertShapeInSelectedShapes(selected);
 
             if(selected->getType() == 2) {
                 if(((QtParallelogram*)selected)->isControlPoint(pressedPoint, epsilon)) {
@@ -82,9 +91,6 @@ void CanvasWidget::mousePressEvent(QMouseEvent *event) {
             break;
         }
     }
-    if (selected == NULL)
-        clearSelectedShapes();
-
 }
 
 void CanvasWidget::mouseMoveEvent(QMouseEvent *event) {
@@ -103,13 +109,13 @@ void CanvasWidget::mouseMoveEvent(QMouseEvent *event) {
                 selected->resize(currentPoint, 1);
             } else if(controlPointModify) {
                 ((QtParallelogram*)selected)->setControlPoint(currentPoint.x);
-            } else {
+            } else if (transformation == MOVING) {
                 for(const auto &shape: selectedShapes) //foreach Loop
                 {
                     (&*shape)->move((&*shape)->getCenter()-selected->getCenter() + currentPoint - pressedPoint);
                 }
-//
             }
+
         } else {
             transformation = CREATING;
             switch(creatingType) {
@@ -132,9 +138,14 @@ void CanvasWidget::mouseMoveEvent(QMouseEvent *event) {
     }
 }
 
-void CanvasWidget::mouseReleaseEvent(QMouseEvent *) {
-
-    if(transformation == CREATING) {
+void CanvasWidget::mouseReleaseEvent(QMouseEvent *)
+{
+    if (selected == NULL) { //Нажатие на пустую область. Снимаем выдиление
+        clearSelectedShapes();
+    }
+    if (transformation == MOVING) {}
+    else if(transformation == CREATING or !isKeyPressed(Qt::Key_Control) and selected != NULL) { //Оставляем 1 выделенную фигуру: конец создания фигуры, нажатие без Ctrl
+        clearSelectedShapes();
         insertShapeInSelectedShapes(selected);
     }
 
