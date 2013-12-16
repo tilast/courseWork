@@ -17,7 +17,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     createActions();
     createMenus();
 
-    setCurrentFile("");
+    setCurrentFile("Untitled");
     setUnifiedTitleAndToolBarOnMac(true);
 }
 
@@ -82,6 +82,13 @@ void MainWindow::deleteSelected()
                 update();
 }
 
+void MainWindow::setCurrentFile(const QString &filename)
+{
+    curFileName = filename;
+    this->setWindowTitle(curFileName);
+
+}
+
 ///////////////////////////////////////////////////////////////////
 //                                                               //
 //   SVG CODING & PARSING                                        //
@@ -102,18 +109,19 @@ const QString MainWindow::svgImageCode(shapesContainer *shapes)
     return svgCode;
 }
 
-bool MainWindow::parseXMLForSVG(const QString &filename)
+shapesContainer MainWindow::parseXMLFileForSVG(const QString &filename)
 {
     QFile* file = new QFile(filename);
+    shapesContainer newContainer;
+
     if (!file->open(QIODevice::ReadOnly | QIODevice::Text))
     {
-        return false ;
+        return newContainer;
     }
 
 
     QXmlStreamReader xml(file);
 
-    canvas->shapes.clear();
     while (!xml.atEnd() && !xml.hasError())
         {
             QXmlStreamReader::TokenType token = xml.readNext();
@@ -131,11 +139,44 @@ bool MainWindow::parseXMLForSVG(const QString &filename)
                     Point2D first(x,y);
                     Point2D second(x+width,y+height);
 
-                    canvas->shapes.push_back(new QtRectangle(first, second));
+                    newContainer.push_back(new QtRectangle(first, second));
                 }
             }
         }
-    return true;
+    return newContainer;
+}
+
+shapesContainer MainWindow::parseXMLTextForSVG(const QString &svgText)
+{
+    shapesContainer newContainer;
+
+    if (svgText.isEmpty())
+        return newContainer;
+
+//    QXmlStreamReader xml(file);
+
+//    while (!xml.atEnd() && !xml.hasError())
+//        {
+//            QXmlStreamReader::TokenType token = xml.readNext();
+//            if (token == QXmlStreamReader::StartDocument)
+//                continue;
+//            if (token == QXmlStreamReader::StartElement)
+//            {
+//                if (xml.name() == "svg")
+//                    continue;
+//                if (xml.name() == "rect") {
+//                    double height = xml.attributes().value("height").toDouble();
+//                    double width = xml.attributes().value("width").toDouble();
+//                    double x = xml.attributes().value("x").toDouble();
+//                    double y = xml.attributes().value("y").toDouble();
+//                    Point2D first(x,y);
+//                    Point2D second(x+width,y+height);
+
+//                    newContainer.push_back(new QtRectangle(first, second));
+//                }
+//            }
+//        }
+    return newContainer;
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -233,7 +274,6 @@ bool MainWindow::saveFileByData(QString fileName)
 
 }
 
-void MainWindow::setCurrentFile(const QString &fileName) { qDebug() <<"current file setting"; }
 
 ///////////////////////////////////////////////////////////////////
 //                                                               //
@@ -285,8 +325,11 @@ void MainWindow::createActions()
 void MainWindow::newFile() { qDebug() <<"new file"; }
 void MainWindow::open() //Open file
 {
-    curFileName = loadFileNameDialog();
-    parseXMLForSVG(curFileName);
+    if (haveToSave()) {
+        setCurrentFile(loadFileNameDialog());
+        canvas->shapes.clear();
+        canvas->shapes = parseXMLFileForSVG(curFileName);
+    }
     update();
 }
 
@@ -295,10 +338,21 @@ void MainWindow::close() { //Closing file
 }
 
 bool MainWindow::save() { //Save file
-    canvas->setModified(false);
-    return saveFileByText(curFileName, svgImageCode(&canvas->shapes));
+    if(saveFileByText(curFileName, svgImageCode(&canvas->shapes))) {
+        canvas->setModified(false);
+        return true;
+    }
+    return false;
+
 }
-bool MainWindow::saveAs() { qDebug() <<"saveAs file"; return true;}
+bool MainWindow::saveAs()
+{
+    QString newFileName = saveFileNameDialog();
+    if (newFileName.isEmpty())
+        return false;
+    setCurrentFile(newFileName);
+    save();
+}
 
 bool MainWindow::exportSVG()
 {

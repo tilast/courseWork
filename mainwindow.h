@@ -57,12 +57,14 @@ private:
     CanvasWidget *canvas;
 
     QString curFileName;
+    void setCurrentFile(const QString &filename);
 
     void createMenus();
     void createActions();
 
     QString loadFileText(const QString &fileName);
-    bool parseXMLForSVG(const QString &filename);
+    shapesContainer parseXMLFileForSVG(const QString &filename);
+    shapesContainer parseXMLTextForSVG(const QString &svgText);
 
     QString loadFileNameDialog();
     bool haveToSave();
@@ -73,7 +75,6 @@ private:
     bool saveFileByData(QString fileName);
     bool saveFileByText(QString fileName, QString text);
     QString saveFileNameDialog();
-    void setCurrentFile(const QString &fileName);
 
     QMenu *fileMenu;
     QMenu *editMenu;
