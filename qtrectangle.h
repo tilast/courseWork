@@ -23,6 +23,13 @@ public:
     bool isBottomRight(Point2D pressedPoint, Point2D epsilon) const;
     void setType();
     int getType();
+    virtual QString svgElementCode() const {
+        Point2D center = getCenter();
+        Point2D size = getSize();
+
+        return QString("<rect x=\"%1\" y=\"%2\" width=\"%3\" height=\"%4\" />").arg(center.x-size.x/2).arg(center.y-size.y/2).arg(size.x).arg(size.y);
+
+    }
 };
 
 #endif // QTRECTANGLE_H

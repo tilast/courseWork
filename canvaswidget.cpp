@@ -20,12 +20,18 @@ void CanvasWidget::changeType(int type)
 {
     creatingType = type;
 }
+void CanvasWidget::selectAll() {
+    selectedShapes.clear();
+    for(auto iter = shapes.begin(); iter != shapes.end(); iter++) {
+        selectedShapes.insert(*iter);
+    }
 
 void CanvasWidget::mousePressEvent(QMouseEvent *event) {
+
     pressedPoint.x = event->localPos().x();
     pressedPoint.y = event->localPos().y();
 
-    if(selected) {
+    if(selected && keyPressed(Qt::Key_Control)) {
         selected->select(false);
     }
     selected = NULL;
@@ -36,6 +42,14 @@ void CanvasWidget::mousePressEvent(QMouseEvent *event) {
 
             selected = shapes[shapes.size() - 1];
             selected->select(true);
+
+            //Если не нажата клавиша CTRL, то выделение снимается, а выделяется только один элемент
+            if(keyPressed(Qt::Key_Control))
+                selectedShapes.clear();
+
+            selectedShapes.insert(selected);
+
+            qDebug() <<selectedShapes.size();
 
             if(selected->isTopLeft(pressedPoint, epsilon)) {
                 leftResize = true;
@@ -56,6 +70,7 @@ void CanvasWidget::mousePressEvent(QMouseEvent *event) {
 }
 
 void CanvasWidget::mouseMoveEvent(QMouseEvent *event) {
+
     if((event->buttons()) & Qt::LeftButton) {
         Point2D currentPoint;
         currentPoint.x = event->localPos().x();
@@ -86,6 +101,9 @@ void CanvasWidget::mouseMoveEvent(QMouseEvent *event) {
 
             shapes.push_back(selected);
             selected->select(true);
+
+            /////////////////
+            setModified(true);
         }
 
         update();
@@ -93,22 +111,17 @@ void CanvasWidget::mouseMoveEvent(QMouseEvent *event) {
 }
 
 void CanvasWidget::mouseReleaseEvent(QMouseEvent *) {
+
     if(creating) {
         creating = false;
+        selected->select(false);
+        selected = NULL;
     }
+
     update();
     leftResize = false;
     rightResize = false;
     controlPointModify = false;
-}
-
-void CanvasWidget::keyPressEvent(QKeyEvent * event) {
-    selected = NULL;
-    update();
-}
-void CanvasWidget::keyReleaseEvent(QKeyEvent * event) {
-    selected = NULL;
-    update();
 }
 
 void CanvasWidget::paintEvent(QPaintEvent *) {
@@ -125,4 +138,7 @@ void CanvasWidget::toFront(int number) {
     QtShape2D* tmp = shapes[number];
     shapes[number] = shapes[top];
     shapes[top] = tmp;
+
+    /////////////////
+    setModified(true);
 }

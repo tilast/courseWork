@@ -24,6 +24,7 @@ public:
     
 protected:
     void keyPressEvent(QKeyEvent* event);
+    void keyReleaseEvent(QKeyEvent * event);
     void deleteSelected();
 
 private slots:
@@ -35,6 +36,7 @@ private slots:
     bool save();
     bool saveAs();
 
+    bool exportSVG();
     void print();
 
     void undo();
@@ -57,14 +59,23 @@ private:
     Ui::MainWindow *ui;
     CanvasWidget *canvas;
 
-    QString curFile;
+    QString curFileName;
 
     void createMenus();
     void createActions();
-    void loadFile(const QString &fileName);
 
-    bool maybeSave();
-    bool saveFile(const QString &fileName);
+    QString loadFileText(const QString &fileName);
+    bool parseXMLForSVG(const QString &filename);
+
+    QString loadFileNameDialog();
+    bool haveToSave();
+
+    //Coding of data
+    const QString svgImageCode(shapesContainer *container);
+
+    bool saveFileByData(QString fileName);
+    bool saveFileByText(QString fileName, QString text);
+    QString saveFileNameDialog();
     void setCurrentFile(const QString &fileName);
 
     QMenu *fileMenu;
@@ -74,6 +85,9 @@ private:
     QAction *openAct;
     QAction *saveAct;
     QAction *saveAsAct;
+
+    QAction *exportSVGAct;
+
     QAction *closeAct;
     QAction *printAct;
 

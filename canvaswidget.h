@@ -5,10 +5,16 @@
 #include <QMouseEvent>
 #include <QKeyEvent>
 #include <QPaintEvent>
+#include <QDebug>
+
 #include <vector>
+#include <set>
 #include "qtshape.h"
 #include "qtrectangle.h"
 #include "qtparallelogram.h"
+
+typedef std::vector<QtShape2D*> shapesContainer;
+typedef std::set<QtShape2D*> selectedShapesContainer;
 
 class CanvasWidget : public QWidget
 {
@@ -17,15 +23,21 @@ public:
     explicit CanvasWidget(QWidget *parent = 0);
     ~CanvasWidget();
 
-    std::vector<QtShape2D*> shapes;
+    shapesContainer shapes;
+    selectedShapesContainer selectedShapes;
+
     QtShape2D* selected;
     int creatingType;
     float defaultOffsetParallelogram;
 
-    bool isModified() { return __isModified; }
     void changeType(int type);
+    bool isModified() { return __isModified; }
+    void setModified(bool flag) { __isModified = flag; }
+    void selectAll();
+    int pressedKeyCode;
+signals:    
+void modified();
 
-signals:
 public slots:
 
 protected:
@@ -34,9 +46,6 @@ protected:
     virtual void mouseMoveEvent(QMouseEvent * event);
     virtual void mouseReleaseEvent(QMouseEvent * event);
     virtual void paintEvent(QPaintEvent * event);
-
-    virtual void keyPressEvent(QKeyEvent *);
-    virtual void keyReleaseEvent(QKeyEvent *);
 
     Point2D pressedPoint, epsilon;
     bool creating;
@@ -47,6 +56,7 @@ protected:
 
 private:
     bool __isModified;
+    bool keyPressed(Qt::Key keyCode) { return (pressedKeyCode == 0 || pressedKeyCode != keyCode); }
 };
 
 #endif // CANVASWIDGET_H
