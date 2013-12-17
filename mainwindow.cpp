@@ -5,6 +5,8 @@
 #include <QFileDialog>
 #include <QXmlStreamReader>
 
+#include <QtXml/qdom.h>
+
 #include <vector>
 #include <iostream>
 #include <algorithm>
@@ -17,7 +19,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     createActions();
     createMenus();
 
-    setCurrentFile("");
+    setCurrentFile("Untitled");
     setUnifiedTitleAndToolBarOnMac(true);
 }
 
@@ -82,6 +84,24 @@ void MainWindow::deleteSelected()
                 update();
 }
 
+void MainWindow::setTextToClipboard(const QString &text)
+{
+    qDebug() <<"Save to clipboard: "<<text;
+    QApplication::clipboard()->setText(text);
+}
+
+const QString MainWindow::getTextToClipboard()
+{
+    return QApplication::clipboard()->text();
+}
+
+void MainWindow::setCurrentFile(const QString &filename)
+{
+    curFileName = filename;
+    this->setWindowTitle(curFileName);
+
+}
+
 ///////////////////////////////////////////////////////////////////
 //                                                               //
 //   SVG CODING & PARSING                                        //
@@ -102,18 +122,19 @@ const QString MainWindow::svgImageCode(shapesContainer *shapes)
     return svgCode;
 }
 
-bool MainWindow::parseXMLForSVG(const QString &filename)
+shapesContainer MainWindow::parseXMLFileForSVG(const QString &filename)
 {
     QFile* file = new QFile(filename);
+    shapesContainer newContainer;
+
     if (!file->open(QIODevice::ReadOnly | QIODevice::Text))
     {
-        return false ;
+        return newContainer;
     }
 
 
     QXmlStreamReader xml(file);
 
-    canvas->shapes.clear();
     while (!xml.atEnd() && !xml.hasError())
         {
             QXmlStreamReader::TokenType token = xml.readNext();
@@ -131,7 +152,7 @@ bool MainWindow::parseXMLForSVG(const QString &filename)
                     Point2D first(x,y);
                     Point2D second(x+width,y+height);
 
-                    canvas->shapes.push_back(new QtRectangle(first, second));
+                    newContainer.push_back(new QtRectangle(first, second));
                 }
 //                if (xml.name() == "polygon") {
 //                    double height = xml.attributes().value("height").toString().toDouble();
@@ -145,7 +166,41 @@ bool MainWindow::parseXMLForSVG(const QString &filename)
 //                }
             }
         }
-    return true;
+    return newContainer;
+}
+
+shapesContainer MainWindow::parseXMLTextForSVG(const QString &svgText)
+{
+    shapesContainer newContainer;
+    if (svgText.isEmpty())
+        return newContainer;
+    qDebug() <<"parseSVGText: "<<svgText;
+    QDomDocument doc;
+    doc.setContent(svgText);
+    QDomElement docElem = doc.documentElement();
+    QDomNode n = docElem.firstChild();
+      while( !n.isNull() ) {
+          QDomElement e = n.toElement(); // try to convert the node to an element.
+          if( !e.isNull() ) { // the node was really an element.
+              QString tagName = e.tagName();
+              if (tagName == "rect") {
+                  double height = e.attribute("height").toDouble();
+                  double width = e.attribute("width").toDouble();
+                  double x = e.attribute("x").toDouble();
+                  double y = e.attribute("y").toDouble();
+                  Point2D first(x,y);
+                  Point2D second(x+width,y+height);
+
+                  newContainer.push_back(new QtRectangle(first, second));
+              }
+          }
+          n = n.nextSibling();
+      }
+
+//    qDebug() <<doc.firstChild().nodeValue();
+//    QString helloWorld=list.at(0).toElement().text();
+
+    return newContainer;
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -243,7 +298,6 @@ bool MainWindow::saveFileByData(QString fileName)
 
 }
 
-void MainWindow::setCurrentFile(const QString &fileName) { qDebug() <<"current file setting"; }
 
 ///////////////////////////////////////////////////////////////////
 //                                                               //
@@ -256,6 +310,9 @@ void MainWindow::createMenus() {
     connect(ui->takeRectangle, SIGNAL(clicked(bool)), this, SLOT(selectRectangle()));
     connect(ui->takeParallelogram, SIGNAL(clicked(bool)), this, SLOT(selectParallelogram()));
 
+    connect(ui->move, SIGNAL(clicked()), this, SLOT(selectMove()));
+    connect(ui->cursor, SIGNAL(clicked()), this, SLOT(selectCursor()));
+
     connect(ui->backBlue, SIGNAL(clicked(bool)), this, SLOT(selectBackBlue()));
     connect(ui->backRed, SIGNAL(clicked(bool)), this, SLOT(selectBackRed()));
     connect(ui->backGreen, SIGNAL(clicked(bool)), this, SLOT(selectBackGreen()));
@@ -267,6 +324,7 @@ void MainWindow::createMenus() {
 
 void MainWindow::selectBackRed() {
     canvas->changeBackColor(1);
+    qDebug() <<"Selected color: red";
 }
 void MainWindow::selectBackGreen() {
     canvas->changeBackColor(2);
@@ -328,8 +386,11 @@ void MainWindow::createActions()
 void MainWindow::newFile() { qDebug() <<"new file"; }
 void MainWindow::open() //Open file
 {
-    curFileName = loadFileNameDialog();
-    parseXMLForSVG(curFileName);
+    if (haveToSave()) {
+        setCurrentFile(loadFileNameDialog());
+        canvas->shapes.clear();
+        canvas->shapes = parseXMLFileForSVG(curFileName);
+    }
     update();
 }
 
@@ -338,10 +399,21 @@ void MainWindow::close() { //Closing file
 }
 
 bool MainWindow::save() { //Save file
-    canvas->setModified(false);
-    return saveFileByText(curFileName, svgImageCode(&canvas->shapes));
+    if(saveFileByText(curFileName, svgImageCode(&canvas->shapes))) {
+        canvas->setModified(false);
+        return true;
+    }
+    return false;
+
 }
-bool MainWindow::saveAs() { qDebug() <<"saveAs file"; return true;}
+bool MainWindow::saveAs()
+{
+    QString newFileName = saveFileNameDialog();
+    if (newFileName.isEmpty())
+        return false;
+    setCurrentFile(newFileName);
+    return save();
+}
 
 bool MainWindow::exportSVG()
 {
@@ -354,19 +426,46 @@ void MainWindow::print() { qDebug() <<"print file"; }
 void MainWindow::undo() { qDebug() <<"undo"; }
 void MainWindow::redo() { qDebug() <<"redo"; }
 
-void MainWindow::cut() { qDebug() <<"cut"; }
-void MainWindow::copy() { qDebug() <<"copy"; }
-void MainWindow::paste()  { qDebug() <<"paste"; }
-void MainWindow::selectAll()  {
+void MainWindow::cut()
+{
+    qDebug() <<"cut";
+    copy();
+    deleteSelected();
+}
+void MainWindow::copy()
+{
+    qDebug() <<"copy";
+    shapesContainer output(canvas->selectedShapes.begin(), canvas->selectedShapes.end());
+    QString svgToClipboard = svgImageCode(&output);
+    setTextToClipboard(svgToClipboard);
+}
+void MainWindow::paste()
+{
+    qDebug() <<"paste";
+    QString clipText = getTextToClipboard();
+    shapesContainer newShapes = parseXMLTextForSVG(clipText);
+    canvas->shapes.insert(canvas->shapes.end(),newShapes.begin(), newShapes.end());
+
+    update();
+
+
+}
+void MainWindow::selectAll()
+{
     canvas->selectAll();
 }
 
-void MainWindow::deleteAction()  { qDebug() <<"delete"; deleteSelected(); }
+void MainWindow::deleteAction()
+{
+    deleteSelected();
+}
 
 void MainWindow::about()  { qDebug() <<"about"; }
 void MainWindow::selectRectangle() {
     canvas->changeType(1);
+    instrument = FIGURE;
 }
 void MainWindow::selectParallelogram() {
     canvas->changeType(2);
+    instrument = FIGURE;
 }

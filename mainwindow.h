@@ -8,7 +8,9 @@
 
 #include <QDebug>
 #include <QKeyEvent>
+#include <QClipboard>
 
+enum Instruments {CURSOR = 0,MOVE = 1, FIGURE = 2};
 
 namespace Ui {
 class MainWindow;
@@ -62,18 +64,26 @@ private slots:
     void selectLineRed();
     void selectLineGreen();
     void selectLineBlue();
+    void selectMove() { instrument = MOVE;  }
+    void selectCursor() { instrument = CURSOR; }
 
 private:
     Ui::MainWindow *ui;
     CanvasWidget *canvas;
+    Instruments instrument;
+
+    void setTextToClipboard(const QString &text);
+    const QString getTextToClipboard();
 
     QString curFileName;
+    void setCurrentFile(const QString &filename);
 
     void createMenus();
     void createActions();
 
     QString loadFileText(const QString &fileName);
-    bool parseXMLForSVG(const QString &filename);
+    shapesContainer parseXMLFileForSVG(const QString &filename);
+    shapesContainer parseXMLTextForSVG(const QString &svgText);
 
     QString loadFileNameDialog();
     bool haveToSave();
@@ -84,7 +94,6 @@ private:
     bool saveFileByData(QString fileName);
     bool saveFileByText(QString fileName, QString text);
     QString saveFileNameDialog();
-    void setCurrentFile(const QString &fileName);
 
     QMenu *fileMenu;
     QMenu *editMenu;

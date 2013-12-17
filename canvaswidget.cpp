@@ -2,7 +2,7 @@
 
 #include <QDebug>
 CanvasWidget::CanvasWidget(QWidget *parent) :
-    QWidget(parent), selected(NULL), creating(false)
+    QWidget(parent), selected(NULL), transformation(NONE)
 {
     epsilon.x = 20;
     epsilon.y = 20;
@@ -26,8 +26,10 @@ void CanvasWidget::changeType(int type)
 {
     creatingType = type;
 }
+
 void CanvasWidget::changeBackColor(int color)
 {
+    qDebug() <<"Change back color";
     switch(color) {
         case 1 :
             currentBackColor = Color(1, 0, 0);
@@ -39,12 +41,12 @@ void CanvasWidget::changeBackColor(int color)
             currentBackColor = Color(0, 0, 1);
             break;
     }
-
-    if(selected) {
-        selected->getStyle().fillColor.setColor(currentBackColor);
-
-        update();
-    }
+    qDebug() <<selected;
+    if (!selectedShapes.empty())
+        for(const auto &shape: selectedShapes) {
+            (&*shape)->getStyle().fillColor.setColor(currentBackColor);
+        }
+    update();
 }
 void CanvasWidget::changeLineColor(int color)
 {
@@ -59,52 +61,77 @@ void CanvasWidget::changeLineColor(int color)
             currentLineColor = Color(0, 0, 1);
             break;
     }
-
-    if(selected) {
-        selected->getStyle().lineColor.setColor(currentLineColor);
-        update();
-    }
+    if (!selectedShapes.empty())
+        for(const auto &shape: selectedShapes) {
+            (&*shape)->getStyle().lineColor.setColor(currentLineColor);
+        }
+    update();
 }
-void CanvasWidget::selectAll() {
+
+void CanvasWidget::clearSelectedShapes()
+{
+    for(const auto &shape: shapes) {
+        (&*shape)->select(false);
+    }
     selectedShapes.clear();
-    for(shapesContainer::iterator iter = shapes.begin(); iter != shapes.end(); iter++) {
-        selectedShapes.insert(*iter);
-    }}
+}
+void CanvasWidget::insertShapeInSelectedShapes(QtShape2D* shape)
+{
+    shape->select(true);
+    selectedShapes.insert(shape);
+}
+
+bool CanvasWidget::havingShapeInSelectedShapes(QtShape2D* shape) {
+    size_t oldSize = selectedShapes.size();
+    selectedShapesContainer tmpCont = selectedShapes;
+    tmpCont.insert(shape);
+    return oldSize == tmpCont.size();
+}
+
+void CanvasWidget::selectAll()
+{
+    clearSelectedShapes();
+    for(const auto &shape: shapes) {
+        (&*shape)->select(true);
+        selectedShapes.insert(&*shape);
+    }
+    update();
+}
 
 void CanvasWidget::mousePressEvent(QMouseEvent *event) {
 
     pressedPoint.x = event->localPos().x();
     pressedPoint.y = event->localPos().y();
 
-    if(selected && keyPressed(Qt::Key_Control)) {
-        selected->select(false);
-    }
     selected = NULL;
-
+    transformation = NONE;
     for(unsigned i = shapes.size(); i > 0; i--) {
         if(shapes[i - 1]->belongs(pressedPoint)) {
-            toFront(i - 1);
+            //Нажали на фигуру
+            toFront(i - 1); //переместилю фигуру вперед
+            selected = shapes[shapes.size() - 1]; //Запоминаем последню выбранную фигуры
 
-            selected = shapes[shapes.size() - 1];
-            selected->select(true);
-
-            //Если не нажата клавиша CTRL, то выделение снимается, а выделяется только один элемент
-            if(keyPressed(Qt::Key_Control))
-                selectedShapes.clear();
-
-            selectedShapes.insert(selected);
-
-            qDebug() <<selectedShapes.size();
-
+            //Проверяем нажатие на контроллер масштабирования (левый верхний)
             if(selected->isTopLeft(pressedPoint, epsilon)) {
                 topLeftResize = true;
             } else if(selected->isBottomRight(pressedPoint, epsilon)) {
                 bottomRightResize = true;
             } else if(selected->isBottomLeft(pressedPoint, epsilon)) {
-//                bottomLeftResize = true;
+               bottomLeftResize = true;
             } else if(selected->isTopRight(pressedPoint, epsilon)) {
-//                topRightResize = true;
+               topRightResize = true;
+                // transformation = LEFT_RESIZE;
             }
+            //Проверяем нажатие на контроллек масштабирования (правый нижний)
+            // else if(selected->isBottomRight(pressedPoint, epsilon)){
+            //     transformation = RIGHT_RESIZE;
+            // }
+
+            if (transformation == LEFT_RESIZE || transformation == RIGHT_RESIZE) //Оставляем только одну выделенную фигуру6 которую хотим масштабировать
+                clearSelectedShapes();
+            if (havingShapeInSelectedShapes(selected))
+                transformation = MOVING;
+             insertShapeInSelectedShapes(selected);
 
             if(selected->getType() == 2) {
                 if(((QtParallelogram*)selected)->isControlPoint(pressedPoint, epsilon)) {
@@ -125,7 +152,7 @@ void CanvasWidget::mouseMoveEvent(QMouseEvent *event) {
         currentPoint.x = event->localPos().x();
         currentPoint.y = event->localPos().y();
 
-        if(creating) {
+        if(transformation == CREATING) {
             shapes.back()->setBounds(pressedPoint, currentPoint);
         } else if(selected) {
             if(controlPointModify) {
@@ -140,9 +167,23 @@ void CanvasWidget::mouseMoveEvent(QMouseEvent *event) {
                 selected->resize(currentPoint, 3);
             } else {
                 selected->move(currentPoint - pressedPoint);
+// =======
+//             if(transformation == LEFT_RESIZE) {
+//                 selected->resize(currentPoint, 0);
+//             } else if(transformation == RIGHT_RESIZE) {
+//                 selected->resize(currentPoint, 1);
+//             } else if(controlPointModify) {
+//                 ((QtParallelogram*)selected)->setControlPoint(currentPoint.x);
+//             } else if (transformation == MOVING) {
+//                 for(const auto &shape: selectedShapes) //foreach Loop
+//                 {
+//                     (&*shape)->move((&*shape)->getCenter()-selected->getCenter() + currentPoint - pressedPoint);
+//                 }
+//>>>>>>> 58591d064c3b898ae4671dd70530a81f8dfeff03
             }
+
         } else {
-            creating = true;
+            transformation = CREATING;
             switch(creatingType) {
                 case 2 :
                     selected = new QtParallelogram(pressedPoint, pressedPoint, defaultOffsetParallelogram);
@@ -165,20 +206,28 @@ void CanvasWidget::mouseMoveEvent(QMouseEvent *event) {
     }
 }
 
-void CanvasWidget::mouseReleaseEvent(QMouseEvent *) {
-
-    if(creating) {
-        creating = false;
-        selected->select(false);
-        selected = NULL;
+void CanvasWidget::mouseReleaseEvent(QMouseEvent *)
+{
+    if (selected == NULL) { //Нажатие на пустую область. Снимаем выдиление
+        clearSelectedShapes();
+    }
+    if (transformation == MOVING) {}
+    else if(transformation == CREATING or !isKeyPressed(Qt::Key_Control) and selected != NULL) { //Оставляем 1 выделенную фигуру: конец создания фигуры, нажатие без Ctrl
+        clearSelectedShapes();
+        insertShapeInSelectedShapes(selected);
     }
 
     update();
+// <<<<<<< HEAD
     topLeftResize = false;
     bottomRightResize = false;
     topRightResize = false;
     bottomLeftResize = false;
+// =======
+// >>>>>>> 58591d064c3b898ae4671dd70530a81f8dfeff03
     controlPointModify = false;
+    // transformation = NONE;
+    selected = NULL;
 }
 
 void CanvasWidget::paintEvent(QPaintEvent *) {
