@@ -187,6 +187,7 @@ void CanvasWidget::mouseMoveEvent(QMouseEvent *event) {
             }
 
         } else {
+            qDebug() << "creating type: " << creatingType;
             transformation = CREATING;
             switch(creatingType) {
                 case 2 :
@@ -200,6 +201,10 @@ void CanvasWidget::mouseMoveEvent(QMouseEvent *event) {
                     break;
                 case 4:
                     selected = new QtZigzag(pressedPoint, pressedPoint, zigzagPointsAmount);
+                    break;
+                case 5:
+                    selected = new QtArrow(pressedPoint, pressedPoint);
+                    break;
             }
 
             selected->getStyle().lineColor.setColor(currentLineColor);

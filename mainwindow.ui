@@ -84,6 +84,13 @@
          </property>
         </widget>
        </item>
+       <item>
+        <widget class="QRadioButton" name="takeArrow">
+         <property name="text">
+          <string>Arrow</string>
+         </property>
+        </widget>
+       </item>
       </layout>
      </item>
     </layout>

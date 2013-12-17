@@ -59,6 +59,7 @@ private slots:
     void selectParallelogram();
     void selectRhombus();
     void selectZigzag();
+    void selectArrow();
 
     void selectBackRed();
     void selectBackGreen();
