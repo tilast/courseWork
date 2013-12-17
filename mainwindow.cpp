@@ -276,41 +276,15 @@ void MainWindow::createMenus() {
     connect(ui->takeRectangle, SIGNAL(clicked(bool)), this, SLOT(selectRectangle()));
     connect(ui->takeParallelogram, SIGNAL(clicked(bool)), this, SLOT(selectParallelogram()));
     connect(ui->takeRhombus, SIGNAL(clicked(bool)), this, SLOT(selectRhombus()));
+    connect(ui->takeZigzag, SIGNAL(clicked(bool)), this, SLOT(selectZigzag()));
 
     connect(ui->colorPanel, SIGNAL(frontColorChanged(QColor)),this,SLOT(selectFillColor(QColor)));
     connect(ui->colorPanel, SIGNAL(backColorChanged(QColor)),this,SLOT(selectLineColor(QColor)));
-//    connect(ui->backBlue, SIGNAL(clicked(bool)), this, SLOT(selectBackBlue()));
-//    connect(ui->backRed, SIGNAL(clicked(bool)), this, SLOT(selectBackRed()));
-//    connect(ui->backGreen, SIGNAL(clicked(bool)), this, SLOT(selectBackGreen()));
 
-//    connect(ui->lineBlue, SIGNAL(clicked(bool)), this, SLOT(selectLineBlue()));
-//    connect(ui->lineRed, SIGNAL(clicked(bool)), this, SLOT(selectLineRed()));
-//    connect(ui->lineGreen, SIGNAL(clicked(bool)), this, SLOT(selectLineGreen()));
-
-//    fillColorPallete = new ColorDialogButton(ui->fillColorButton);
+    connect(ui->zigzagPoints, SIGNAL(valueChanged(int)), this, SLOT(setZigzagPointAmount(int)));
 
 }
 
-//void MainWindow::selectBackRed() {
-//    canvas->changeBackColor(1);
-//    qDebug() <<"Selected color: red";
-//}
-//void MainWindow::selectBackGreen() {
-//    canvas->changeBackColor(2);
-//}
-//void MainWindow::selectBackBlue() {
-//    canvas->changeBackColor(3);
-//}
-
-//void MainWindow::selectLineRed() {
-//    canvas->changeLineColor(1);
-//}
-//void MainWindow::selectLineGreen() {
-//    canvas->changeLineColor(2);
-//}
-//void MainWindow::selectLineBlue() {
-//    canvas->changeLineColor(3);
-//}
 
 void MainWindow::createActions()
 {
@@ -432,6 +406,18 @@ void MainWindow::deleteAction()
 
 void MainWindow::about()  { qDebug() <<"about"; }
 
+
+void MainWindow::selectFillColor(QColor newFillColor)
+{
+    canvas->changeBackColor(newFillColor);
+}
+
+void MainWindow::selectLineColor(QColor newLineColor)
+{
+    canvas->changeLineColor(newLineColor);
+
+}
+
 void MainWindow::selectRectangle() {
     canvas->changeType(1);
     instrument = FIGURE;
@@ -445,12 +431,13 @@ void MainWindow::selectRhombus() {
     instrument = FIGURE;
 }
 
-void MainWindow::selectFillColor(QColor newFillColor)
-{
-    canvas->changeBackColor(newFillColor);
+void MainWindow::selectZigzag() {
+    canvas->changeType(4);
+    instrument = FIGURE;
 }
 
-void MainWindow::selectLineColor(QColor newLineColor)
-{
-    canvas->changeLineColor(newLineColor);
+
+
+void MainWindow::setZigzagPointAmount(int amount) {
+    canvas->setZigzagPointAmount(amount);
 }

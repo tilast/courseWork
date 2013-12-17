@@ -29,7 +29,9 @@ SOURCES += main.cpp\
     svgfigureparser.cpp \
     svgparser.cpp \
     colordialogbutton.cpp \
-    qcolorpalletewidget.cpp
+    qcolorpalletewidget.cpp \
+    zigzag.cpp \
+    qtzigzag.cpp
 
 HEADERS  += mainwindow.h \
     base.h \
@@ -48,7 +50,9 @@ HEADERS  += mainwindow.h \
     svgparser.h \
     QtShapeHeaders.h \
     colordialogbutton.h \
-    qcolorpalletewidget.h
+    qcolorpalletewidget.h \
+    zigzag.h \
+    qtzigzag.h
 
 FORMS    += mainwindow.ui \
     qcolorpalletewidget.ui

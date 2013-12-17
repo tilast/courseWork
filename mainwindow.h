@@ -61,17 +61,13 @@ private slots:
     void selectRectangle();
     void selectParallelogram();
     void selectRhombus();
+    void selectZigzag();
 
     void selectFillColor(QColor newFillColor);
     void selectLineColor(QColor newLineColor);
 
-//    void selectBackRed();
-//    void selectBackGreen();
-//    void selectBackBlue();
+    void setZigzagPointAmount(int amount);
 
-//    void selectLineRed();
-//    void selectLineGreen();
-//    void selectLineBlue();
 
 private:
     Ui::MainWindow *ui;

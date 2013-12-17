@@ -13,6 +13,7 @@
 #include "qtrectangle.h"
 #include "qtparallelogram.h"
 #include "qtrhombus.h"
+#include "qtzigzag.h"
 
 typedef std::vector<QtShape2D*> shapesContainer;
 typedef std::set<QtShape2D*> selectedShapesContainer;
@@ -40,6 +41,7 @@ public:
     Color currentLineColor;
     Color currentBackColor;
     DrawStyle currentStyle;
+    int zigzagPointsAmount;
 
     void changeType(int type);
 
@@ -50,6 +52,7 @@ public:
     bool isModified() { return __isModified; }
     void setModified(bool flag) { __isModified = flag; }
     void selectAll();
+    void setZigzagPointAmount(int amount);
     int pressedKeyCode;
 signals:    
 void modified();
