@@ -24,7 +24,10 @@ SOURCES += main.cpp\
     qtparallelogram.cpp \
     parallelogram.cpp \
     qsvgparser.cpp \
-    qtrhombus.cpp
+    qtrhombus.cpp \
+    svgstyleparse.cpp \
+    svgfigureparser.cpp \
+    svgparser.cpp
 
 HEADERS  += mainwindow.h \
     base.h \
@@ -37,6 +40,9 @@ HEADERS  += mainwindow.h \
     qtparallelogram.h \
     parallelogram.h \
     qsvgparser.h \
-    qtrhombus.h
+    qtrhombus.h \
+    svgstyleparse.h \
+    svgfigureparser.h \
+    svgparser.h
 
 FORMS    += mainwindow.ui

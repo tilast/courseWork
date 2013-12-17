@@ -5,15 +5,16 @@
 #include <QFileDialog>
 #include <QXmlStreamReader>
 
-#include <wwWidgets/widgets/wwglobal.h>
-#include <wwWidgets/widgets/qwwtwocolorindicator/QwwTwoColorIndicator>
-
 #include <QtXml/qdom.h>
+
+ #include <QRegExp>
 
 #include <vector>
 #include <iostream>
 #include <algorithm>
 #include <sstream>
+
+#include <svgstyleparse.h>
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow), canvas(NULL)
 {
@@ -129,55 +130,18 @@ const QString MainWindow::svgImageCode(shapesContainer *shapes)
 shapesContainer MainWindow::parseXMLFileForSVG(const QString &filename)
 {
     QFile* file = new QFile(filename);
-    shapesContainer newContainer;
-
+    shapesContainer result;
     if (!file->open(QIODevice::ReadOnly | QIODevice::Text))
     {
-        return newContainer;
+        return result;
     }
 
+    QString content = file->readAll();
+    if (!content.isEmpty()) {
+        result = parseXMLTextForSVG(content);
+    }
 
-    QXmlStreamReader xml(file);
-
-    while (!xml.atEnd() && !xml.hasError())
-        {
-            QXmlStreamReader::TokenType token = xml.readNext();
-            if (token == QXmlStreamReader::StartDocument)
-                continue;
-            if (token == QXmlStreamReader::StartElement)
-            {
-                if (xml.name() == "svg")
-                    continue;
-                if (xml.name() == "rect") {
-                    double height = xml.attributes().value("height").toString().toDouble();
-                    double width = xml.attributes().value("width").toString().toDouble();
-                    double x = xml.attributes().value("x").toString().toDouble();
-                    double y = xml.attributes().value("y").toString().toDouble();
-                    Point2D first(x,y);
-                    Point2D second(x+width,y+height);
-
-                    newContainer.push_back(new QtRectangle(first, second));
-                } else if(xml.name() == "polygon" && xml.attributes().value("abki").toString() == "parallelogram") {
-//                    <svg width="761" height="451">
-//                        <rect x="160" y="128" width="283" height="176" style="fill:rgb(127.5, 127.5, 127.5)" />
-//                        <polygon points="320,148  623,148 593,368  290,368" style="fill:rgb(127.5, 127.5, 127.5)" abki="parallelogram" />
-//                    </svg>
-//                    stringstream pointsStream;
-//                    xml.attributes().value("points").toString();
-                }
-//                if (xml.name() == "polygon") {
-//                    double height = xml.attributes().value("height").toString().toDouble();
-//                    double width = xml.attributes().value("width").toString().toDouble();
-//                    double x = xml.attributes().value("x").toString().toDouble();
-//                    double y = xml.attributes().value("y").toString().toDouble();
-//                    Point2D first(x,y);
-//                    Point2D second(x+width,y+height);
-
-//                    canvas->shapes.push_back(new QtRectangle(first, second));
-//                }
-            }
-        }
-    return newContainer;
+    return result;
 }
 
 shapesContainer MainWindow::parseXMLTextForSVG(const QString &svgText)
@@ -185,7 +149,7 @@ shapesContainer MainWindow::parseXMLTextForSVG(const QString &svgText)
     shapesContainer newContainer;
     if (svgText.isEmpty())
         return newContainer;
-    qDebug() <<"parseSVGText: "<<svgText;
+
     QDomDocument doc;
     doc.setContent(svgText);
     QDomElement docElem = doc.documentElement();
@@ -194,7 +158,29 @@ shapesContainer MainWindow::parseXMLTextForSVG(const QString &svgText)
           QDomElement e = n.toElement(); // try to convert the node to an element.
           if( !e.isNull() ) { // the node was really an element.
               QString tagName = e.tagName();
+              float red = 0, green = 0, blue = 0;
+              QtShape2D *shape = NULL;
+
+              if (!e.attribute("style").isEmpty()) {
+
+                  QString style  = e.attribute("style");
+                  SVGStyleParse styleParse(style); //Parse style Css
+                  if (!style.isEmpty()) {
+
+                      //Fill color
+                    QStringList fillColorStr = styleParse.getFillColor();
+                    if (!fillColorStr.isEmpty()) {
+                        red = fillColorStr[1].toFloat() / 255.0;
+                        green = fillColorStr[2].toFloat() / 255.0;
+                        blue = fillColorStr[3].toFloat() / 255.0;
+                   }
+                  }
+
+              }
+              Color fillColor(red, green, blue);
+
               if (tagName == "rect") {
+
                   double height = e.attribute("height").toDouble();
                   double width = e.attribute("width").toDouble();
                   double x = e.attribute("x").toDouble();
@@ -202,24 +188,19 @@ shapesContainer MainWindow::parseXMLTextForSVG(const QString &svgText)
                   Point2D first(x,y);
                   Point2D second(x+width,y+height);
 
-                  newContainer.push_back(new QtRectangle(first, second));
+                  shape = new QtRectangle(first, second);
               }
-//              else if (tagName == "polygon") {
-//                  double height = e.attribute("height").toDouble();
-//                  double width = e.attribute("width").toDouble();
-//                  double x = e.attribute("x").toDouble();
-//                  double y = e.attribute("y").toDouble();
-//                  Point2D first(x,y);
-//                  Point2D second(x+width,y+height);
 
-//                  newContainer.push_back(new QtRectangle(first, second));
-//              }
+              else if (tagName == "polygon") {
+
+//                   <polygon points=\"%1,%2  %3,%4 %5,%6  %7,%8\" style=\"fill:rgb(%9, %10, %11)\" abki=\"parallelogram\" />
+              }
+              shape->getStyle().setStyle(fillColor, fillColor);
+              if (shape != NULL)
+                  newContainer.push_back(shape);
           }
           n = n.nextSibling();
       }
-
-//    qDebug() <<doc.firstChild().nodeValue();
-//    QString helloWorld=list.at(0).toElement().text();
 
     return newContainer;
 }
