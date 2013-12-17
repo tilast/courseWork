@@ -10,6 +10,7 @@
 #include <vector>
 #include <iostream>
 #include <algorithm>
+#include <sstream>
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow), canvas(NULL)
 {
@@ -153,6 +154,13 @@ shapesContainer MainWindow::parseXMLFileForSVG(const QString &filename)
                     Point2D second(x+width,y+height);
 
                     newContainer.push_back(new QtRectangle(first, second));
+                } else if(xml.name() == "polygon" && xml.attributes().value("abki").toString() == "parallelogram") {
+//                    <svg width="761" height="451">
+//                        <rect x="160" y="128" width="283" height="176" style="fill:rgb(127.5, 127.5, 127.5)" />
+//                        <polygon points="320,148  623,148 593,368  290,368" style="fill:rgb(127.5, 127.5, 127.5)" abki="parallelogram" />
+//                    </svg>
+//                    stringstream pointsStream;
+//                    xml.attributes().value("points").toString();
                 }
 //                if (xml.name() == "polygon") {
 //                    double height = xml.attributes().value("height").toString().toDouble();
@@ -309,6 +317,7 @@ void MainWindow::createMenus() {
     qDebug() <<"menu creation";
     connect(ui->takeRectangle, SIGNAL(clicked(bool)), this, SLOT(selectRectangle()));
     connect(ui->takeParallelogram, SIGNAL(clicked(bool)), this, SLOT(selectParallelogram()));
+    connect(ui->takeRhombus, SIGNAL(clicked(bool)), this, SLOT(selectRhombus()));
 
     connect(ui->move, SIGNAL(clicked()), this, SLOT(selectMove()));
     connect(ui->cursor, SIGNAL(clicked()), this, SLOT(selectCursor()));
@@ -467,5 +476,9 @@ void MainWindow::selectRectangle() {
 }
 void MainWindow::selectParallelogram() {
     canvas->changeType(2);
+    instrument = FIGURE;
+}
+void MainWindow::selectRhombus() {
+    canvas->changeType(3);
     instrument = FIGURE;
 }
