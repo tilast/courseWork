@@ -3,7 +3,7 @@
 
 #include <QDebug>
 
-QtArrow::QtArrow(const Point2D& p1, const Point2D& p2) : Arrow(p1, p2) {
+QtArrow::QtArrow(const Point2D& p1, const Point2D& p2, float coef) : Arrow(p1, p2, coef) {
 }
 
 bool QtArrow::getSide() const {

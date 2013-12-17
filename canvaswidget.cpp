@@ -11,6 +11,7 @@ CanvasWidget::CanvasWidget(QWidget *parent) :
     defaultOffsetParallelogram = 30.0;
     currentBackColor = Color(.5, .5, .5, 1);
     currentLineColor = Color(.0, .0, .5, 1);
+    arrowsTipCoefficient = 0.2;
 
     currentStyle.fillColor = currentBackColor;
     currentStyle.lineColor = currentLineColor;
@@ -30,7 +31,6 @@ void CanvasWidget::changeType(int type)
 
 void CanvasWidget::changeBackColor(int color)
 {
-    qDebug() <<"Change back color";
     switch(color) {
         case 1 :
             currentBackColor = Color(1, 0, 0);
@@ -42,7 +42,6 @@ void CanvasWidget::changeBackColor(int color)
             currentBackColor = Color(0, 0, 1);
             break;
     }
-    qDebug() <<selected;
     if (!selectedShapes.empty())
         for(const auto &shape: selectedShapes) {
             (&*shape)->getStyle().fillColor.setColor(currentBackColor);
@@ -55,7 +54,7 @@ void CanvasWidget::changeBackColor(QColor backColor)
     currentBackColor = Color(backColor.red()/255.0,backColor.green()/255.0,backColor.blue()/255.0);
     if (!selectedShapes.empty())
         for(const auto &shape: selectedShapes) {
-            (&*shape)->getStyle().lineColor.setColor(currentBackColor);
+            (&*shape)->getStyle().fillColor.setColor(currentBackColor);
         }
     update();
 }
@@ -223,7 +222,7 @@ void CanvasWidget::mouseMoveEvent(QMouseEvent *event) {
                     selected = new QtZigzag(pressedPoint, pressedPoint, zigzagPointsAmount);
                     break;
                 case 5:
-                    selected = new QtArrow(pressedPoint, pressedPoint);
+                    selected = new QtArrow(pressedPoint, pressedPoint, arrowsTipCoefficient);
                     break;
             }
 

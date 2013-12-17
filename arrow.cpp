@@ -1,9 +1,10 @@
 #include "arrow.h"
 
-Arrow::Arrow(const Point2D& p1, const Point2D& p2) {
+Arrow::Arrow(const Point2D& p1, const Point2D& p2, float coef) {
     setBounds(p1, p2);
     setType();
     setSide(1);
+    tipCoef = coef;
 }
 
 void Arrow::setBounds(const Point2D &p1, const Point2D &p2) {

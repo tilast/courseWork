@@ -9,7 +9,7 @@ protected:
     float tipCoef;
     bool side;
 public:
-    Arrow(const Point2D& p1, const Point2D& p2);
+    Arrow(const Point2D& p1, const Point2D& p2, float coef);
     virtual void setBounds(const Point2D& p1, const Point2D& p2);
     virtual void move(const Point2D& destination);
     virtual void resize(const Point2D& destination, short t);

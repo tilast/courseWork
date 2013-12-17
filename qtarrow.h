@@ -7,7 +7,7 @@
 
 class QtArrow : public Arrow, public QtShape2D {
 public:
-    QtArrow(const Point2D& p1, const Point2D& p2);
+    QtArrow(const Point2D& p1, const Point2D& p2, float coef);
     DrawStyle& getStyle();
     const DrawStyle& getStyle() const;
     Point2D getCenter() const;
