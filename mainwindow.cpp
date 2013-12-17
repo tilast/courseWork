@@ -5,6 +5,9 @@
 #include <QFileDialog>
 #include <QXmlStreamReader>
 
+#include <wwWidgets/widgets/wwglobal.h>
+#include <wwWidgets/widgets/qwwtwocolorindicator/QwwTwoColorIndicator>
+
 #include <QtXml/qdom.h>
 
 #include <vector>

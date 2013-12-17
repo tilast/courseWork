@@ -9,6 +9,7 @@
 #include <QDebug>
 #include <QKeyEvent>
 #include <QClipboard>
+#include <QColorDialog>
 
 enum Instruments {CURSOR = 0,MOVE = 1, FIGURE = 2};
 
