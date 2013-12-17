@@ -284,8 +284,12 @@ void MainWindow::createMenus() {
 
     connect(ui->zigzagPoints, SIGNAL(valueChanged(int)), this, SLOT(setZigzagPointAmount(int)));
 
+    connect(ui->reflect, SIGNAL(clicked(bool)), this, SLOT(reflect()));
 }
 
+void MainWindow::reflect() {
+    canvas->reflect();
+}
 
 void MainWindow::createActions()
 {

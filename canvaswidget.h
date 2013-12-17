@@ -50,6 +50,7 @@ public:
     void changeBackColor(QColor backColor);
     void changeLineColor(int color);
     void changeLineColor(QColor lineColor);
+    void reflect();
     bool isModified() { return __isModified; }
     void setModified(bool flag) { __isModified = flag; }
     void selectAll();

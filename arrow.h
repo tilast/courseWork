@@ -7,6 +7,7 @@ class Arrow : public Shape2D
 {
 protected:
     float tipCoef;
+    bool side;
 public:
     Arrow(const Point2D& p1, const Point2D& p2);
     virtual void setBounds(const Point2D& p1, const Point2D& p2);
@@ -17,6 +18,9 @@ public:
     virtual int getType();
     virtual void setTipCoef(float& coef);
     virtual float getTipCoef();
+    virtual void reflect();
+    virtual void setSide(bool s);
+    virtual bool getSide() const;
 };
 
 #endif // ARROW_H

@@ -28,6 +28,9 @@ void Parallelogram::resize(const Point2D& destination, short t) {
         setBounds(test, p2);
     }
 }
+void Parallelogram::reflect() {
+    controlPoint = -controlPoint;
+}
 
 bool Parallelogram::belongs(const Point2D& p) {
     Point2D p1 = center - size * 0.5;

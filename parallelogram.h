@@ -14,6 +14,7 @@ public:
     virtual void setControlPoint(const float& cp);
     virtual void move(const Point2D& destination);
     virtual void resize(const Point2D& destination, short t);
+    virtual void reflect();
     virtual bool belongs(const Point2D& point);
     virtual void setType();
     virtual int getType();

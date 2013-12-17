@@ -67,6 +67,8 @@ private slots:
     void selectFillColor(QColor newFillColor);
     void selectLineColor(QColor newLineColor);
 
+    void reflect();
+
     void setZigzagPointAmount(int amount);
 
 

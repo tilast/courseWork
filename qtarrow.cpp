@@ -5,6 +5,18 @@
 QtArrow::QtArrow(const Point2D& p1, const Point2D& p2) : Arrow(p1, p2) {
 }
 
+bool QtArrow::getSide() const {
+    return Arrow::getSide();
+}
+
+void QtArrow::setSide(bool s) {
+    Arrow::setSide(s);
+}
+
+void QtArrow::reflect() {
+    Arrow::reflect();
+}
+
 void QtArrow::draw(QPainter &painter) const {
     Point2D tl = Arrow::center - Arrow::size * 0.5;
     Point2D br = Arrow::center + Arrow::size * 0.5;
@@ -25,15 +37,25 @@ void QtArrow::draw(QPainter &painter) const {
     rightPoint.y = tl.y + (br.y - tl.y)*0.5;
 
     Point2D topTip, bottomTip;
-    topTip.y = tl.y;
-    topTip.x = br.x - Arrow::size.x*tipCoef;
+    if(Arrow::getSide()) {
+        topTip.y = tl.y;
+        topTip.x = br.x - Arrow::size.x*tipCoef;
 
-    bottomTip.y = br.y;
-    bottomTip.x = br.x - Arrow::size.x*tipCoef;
+        bottomTip.y = br.y;
+        bottomTip.x = br.x - Arrow::size.x*tipCoef;
+        painter.drawLine(QPointF(leftPoint.x, leftPoint.y), QPointF(rightPoint.x, rightPoint.y));
+        painter.drawLine(QPointF(topTip.x, topTip.y), QPointF(rightPoint.x, rightPoint.y));
+        painter.drawLine(QPointF(bottomTip.x, bottomTip.y), QPointF(rightPoint.x, rightPoint.y));
+    } else {
+        topTip.y = tl.y;
+        topTip.x = tl.x + Arrow::size.x*tipCoef;
 
-    painter.drawLine(QPointF(leftPoint.x, leftPoint.y), QPointF(rightPoint.x, rightPoint.y));
-    painter.drawLine(QPointF(topTip.x, topTip.y), QPointF(rightPoint.x, rightPoint.y));
-    painter.drawLine(QPointF(bottomTip.x, bottomTip.y), QPointF(rightPoint.x, rightPoint.y));
+        bottomTip.y = br.y;
+        bottomTip.x = tl.x + Arrow::size.x*tipCoef;
+        painter.drawLine(QPointF(leftPoint.x, leftPoint.y), QPointF(rightPoint.x, rightPoint.y));
+        painter.drawLine(QPointF(topTip.x, topTip.y), QPointF(leftPoint.x, leftPoint.y));
+        painter.drawLine(QPointF(bottomTip.x, bottomTip.y), QPointF(leftPoint.x, leftPoint.y));
+    }
 
     if(selected) {
         painter.setBrush(QBrush(QColor(255, 180, 120)));
@@ -112,5 +134,5 @@ int QtArrow::getType() {
 }
 
 QString QtArrow::svgElementCode() const {
-    QString("lkfjvlk");
+    return QString("lkfjvlk");
 }

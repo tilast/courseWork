@@ -64,6 +64,10 @@ bool QtParallelogram::isTopRight(Point2D pressedPoint, Point2D epsilon) const {
     return false;
 }
 
+void QtParallelogram::reflect() {
+    Parallelogram::reflect();
+}
+
 bool QtParallelogram::isBottomLeft(Point2D pressedPoint, Point2D epsilon) const {
     return false;
 }

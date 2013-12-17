@@ -38,6 +38,9 @@ void Rectangle::resize(const Point2D& destination, short t) {
     }
 }
 
+void Rectangle::reflect(){
+}
+
 bool Rectangle::belongs(const Point2D& p) {
     Point2D p1 = center - size * 0.5;
     Point2D p2 = center + size * 0.5;

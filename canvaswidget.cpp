@@ -282,6 +282,14 @@ void CanvasWidget::toFront(int number) {
     setModified(true);
 }
 
+void CanvasWidget::reflect() {
+    for(const auto &shape: selectedShapes) //foreach Loop
+    {
+        (&*shape)->reflect();
+    }
+    update();
+}
+
 void CanvasWidget::setZigzagPointAmount(int amount) {
     zigzagPointsAmount = amount;
 
