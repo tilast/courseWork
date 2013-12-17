@@ -7,10 +7,15 @@
 
 #include <QtXml/qdom.h>
 
+ #include <QRegExp>
+
 #include <vector>
 #include <iostream>
 #include <algorithm>
 #include <sstream>
+
+#include <svgstyleparse.h>
+#include <svgfigureparser.h>
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow), canvas(NULL)
 {
@@ -75,14 +80,10 @@ void MainWindow::deleteSelected()
     qDebug() <<"To delete: "<<selectedShapes->size();
     for(selectedShapesContainer::const_iterator it = selectedShapes->begin(); it != selectedShapes->end(); it++) {
         shapesContainer::iterator itemItr = std::find(shapes->begin(), shapes->end(), *it); //Searching
-        if (itemItr != shapes->end()) {
+        if (itemItr != shapes->end())
             shapes->erase(itemItr);
-            qDebug() <<"Item found";
-        } else {
-            qDebug() <<"Item not found";
-        }
     }
-                update();
+    update();
 }
 
 void MainWindow::setTextToClipboard(const QString &text)
@@ -126,55 +127,18 @@ const QString MainWindow::svgImageCode(shapesContainer *shapes)
 shapesContainer MainWindow::parseXMLFileForSVG(const QString &filename)
 {
     QFile* file = new QFile(filename);
-    shapesContainer newContainer;
-
+    shapesContainer result;
     if (!file->open(QIODevice::ReadOnly | QIODevice::Text))
     {
-        return newContainer;
+        return result;
     }
 
+    QString content = file->readAll();
+    if (!content.isEmpty()) {
+        result = parseXMLTextForSVG(content);
+    }
 
-    QXmlStreamReader xml(file);
-
-    while (!xml.atEnd() && !xml.hasError())
-        {
-            QXmlStreamReader::TokenType token = xml.readNext();
-            if (token == QXmlStreamReader::StartDocument)
-                continue;
-            if (token == QXmlStreamReader::StartElement)
-            {
-                if (xml.name() == "svg")
-                    continue;
-                if (xml.name() == "rect") {
-                    double height = xml.attributes().value("height").toString().toDouble();
-                    double width = xml.attributes().value("width").toString().toDouble();
-                    double x = xml.attributes().value("x").toString().toDouble();
-                    double y = xml.attributes().value("y").toString().toDouble();
-                    Point2D first(x,y);
-                    Point2D second(x+width,y+height);
-
-                    newContainer.push_back(new QtRectangle(first, second));
-                } else if(xml.name() == "polygon" && xml.attributes().value("abki").toString() == "parallelogram") {
-//                    <svg width="761" height="451">
-//                        <rect x="160" y="128" width="283" height="176" style="fill:rgb(127.5, 127.5, 127.5)" />
-//                        <polygon points="320,148  623,148 593,368  290,368" style="fill:rgb(127.5, 127.5, 127.5)" abki="parallelogram" />
-//                    </svg>
-//                    stringstream pointsStream;
-//                    xml.attributes().value("points").toString();
-                }
-//                if (xml.name() == "polygon") {
-//                    double height = xml.attributes().value("height").toString().toDouble();
-//                    double width = xml.attributes().value("width").toString().toDouble();
-//                    double x = xml.attributes().value("x").toString().toDouble();
-//                    double y = xml.attributes().value("y").toString().toDouble();
-//                    Point2D first(x,y);
-//                    Point2D second(x+width,y+height);
-
-//                    canvas->shapes.push_back(new QtRectangle(first, second));
-//                }
-            }
-        }
-    return newContainer;
+    return result;
 }
 
 shapesContainer MainWindow::parseXMLTextForSVG(const QString &svgText)
@@ -182,7 +146,7 @@ shapesContainer MainWindow::parseXMLTextForSVG(const QString &svgText)
     shapesContainer newContainer;
     if (svgText.isEmpty())
         return newContainer;
-    qDebug() <<"parseSVGText: "<<svgText;
+
     QDomDocument doc;
     doc.setContent(svgText);
     QDomElement docElem = doc.documentElement();
@@ -190,33 +154,13 @@ shapesContainer MainWindow::parseXMLTextForSVG(const QString &svgText)
       while( !n.isNull() ) {
           QDomElement e = n.toElement(); // try to convert the node to an element.
           if( !e.isNull() ) { // the node was really an element.
-              QString tagName = e.tagName();
-              if (tagName == "rect") {
-                  double height = e.attribute("height").toDouble();
-                  double width = e.attribute("width").toDouble();
-                  double x = e.attribute("x").toDouble();
-                  double y = e.attribute("y").toDouble();
-                  Point2D first(x,y);
-                  Point2D second(x+width,y+height);
 
-                  newContainer.push_back(new QtRectangle(first, second));
-              }
-//              else if (tagName == "polygon") {
-//                  double height = e.attribute("height").toDouble();
-//                  double width = e.attribute("width").toDouble();
-//                  double x = e.attribute("x").toDouble();
-//                  double y = e.attribute("y").toDouble();
-//                  Point2D first(x,y);
-//                  Point2D second(x+width,y+height);
-
-//                  newContainer.push_back(new QtRectangle(first, second));
-//              }
+              QtShape2D *shape = SVGFigureParser::parseFigure(e);
+              if (shape != NULL)
+                  newContainer.push_back(shape);
           }
           n = n.nextSibling();
       }
-
-//    qDebug() <<doc.firstChild().nodeValue();
-//    QString helloWorld=list.at(0).toElement().text();
 
     return newContainer;
 }
@@ -329,9 +273,6 @@ void MainWindow::createMenus() {
     connect(ui->takeParallelogram, SIGNAL(clicked(bool)), this, SLOT(selectParallelogram()));
     connect(ui->takeRhombus, SIGNAL(clicked(bool)), this, SLOT(selectRhombus()));
     connect(ui->takeZigzag, SIGNAL(clicked(bool)), this, SLOT(selectZigzag()));
-
-    connect(ui->move, SIGNAL(clicked()), this, SLOT(selectMove()));
-    connect(ui->cursor, SIGNAL(clicked()), this, SLOT(selectCursor()));
 
     connect(ui->backBlue, SIGNAL(clicked(bool)), this, SLOT(selectBackBlue()));
     connect(ui->backRed, SIGNAL(clicked(bool)), this, SLOT(selectBackRed()));

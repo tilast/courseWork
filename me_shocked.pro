@@ -25,7 +25,10 @@ SOURCES += main.cpp\
     qtparallelogram.cpp \
     qtrhombus.cpp \
     zigzag.cpp \
-    qtzigzag.cpp
+    qtzigzag.cpp \
+    svgstyleparse.cpp \
+    svgparser.cpp \
+    svgfigureparser.cpp
 
 HEADERS  += mainwindow.h \
     base.h \
@@ -39,6 +42,9 @@ HEADERS  += mainwindow.h \
     qtparallelogram.h \
     qtrhombus.h \
     zigzag.h \
-    qtzigzag.h
+    qtzigzag.h \
+    svgstyleparse.h \
+    svgparser.h \
+    svgfigureparser.h
 
 FORMS    += mainwindow.ui

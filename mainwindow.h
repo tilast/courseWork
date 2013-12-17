@@ -9,6 +9,7 @@
 #include <QDebug>
 #include <QKeyEvent>
 #include <QClipboard>
+#include <QColorDialog>
 
 enum Instruments {CURSOR = 0,MOVE = 1, FIGURE = 2};
 
@@ -68,8 +69,6 @@ private slots:
     void selectLineRed();
     void selectLineGreen();
     void selectLineBlue();
-    void selectMove() { instrument = MOVE;  }
-    void selectCursor() { instrument = CURSOR; }
 
 private:
     Ui::MainWindow *ui;
