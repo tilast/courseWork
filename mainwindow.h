@@ -11,6 +11,8 @@
 #include <QClipboard>
 #include <QColorDialog>
 
+class ColorDialogButton;
+
 enum Instruments {CURSOR = 0,MOVE = 1, FIGURE = 2};
 
 namespace Ui {
@@ -55,23 +57,27 @@ private slots:
 
     void about();
 
+
     void selectRectangle();
     void selectParallelogram();
     void selectRhombus();
 
-    void selectBackRed();
-    void selectBackGreen();
-    void selectBackBlue();
+    void selectFillColor(QColor newFillColor);
+    void selectLineColor(QColor newLineColor);
 
-    void selectLineRed();
-    void selectLineGreen();
-    void selectLineBlue();
+//    void selectBackRed();
+//    void selectBackGreen();
+//    void selectBackBlue();
+
+//    void selectLineRed();
+//    void selectLineGreen();
+//    void selectLineBlue();
 
 private:
     Ui::MainWindow *ui;
     CanvasWidget *canvas;
     Instruments instrument;
-
+    ColorDialogButton *fillColorPallete;
     void setTextToClipboard(const QString &text);
     const QString getTextToClipboard();
 

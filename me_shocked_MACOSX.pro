@@ -27,7 +27,9 @@ SOURCES += main.cpp\
     qtrhombus.cpp \
     svgstyleparse.cpp \
     svgfigureparser.cpp \
-    svgparser.cpp
+    svgparser.cpp \
+    colordialogbutton.cpp \
+    qcolorpalletewidget.cpp
 
 HEADERS  += mainwindow.h \
     base.h \
@@ -44,6 +46,9 @@ HEADERS  += mainwindow.h \
     svgstyleparse.h \
     svgfigureparser.h \
     svgparser.h \
-    QtShapeHeaders.h
+    QtShapeHeaders.h \
+    colordialogbutton.h \
+    qcolorpalletewidget.h
 
-FORMS    += mainwindow.ui
+FORMS    += mainwindow.ui \
+    qcolorpalletewidget.ui

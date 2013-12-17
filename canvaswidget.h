@@ -42,8 +42,11 @@ public:
     DrawStyle currentStyle;
 
     void changeType(int type);
+
     void changeBackColor(int color);
+    void changeBackColor(QColor backColor);
     void changeLineColor(int color);
+    void changeLineColor(QColor lineColor);
     bool isModified() { return __isModified; }
     void setModified(bool flag) { __isModified = flag; }
     void selectAll();

@@ -48,6 +48,16 @@ void CanvasWidget::changeBackColor(int color)
         }
     update();
 }
+
+void CanvasWidget::changeBackColor(QColor backColor)
+{
+    currentBackColor = Color(backColor.red()/255.0,backColor.green()/255.0,backColor.blue()/255.0);
+    if (!selectedShapes.empty())
+        for(const auto &shape: selectedShapes) {
+            (&*shape)->getStyle().lineColor.setColor(currentBackColor);
+        }
+    update();
+}
 void CanvasWidget::changeLineColor(int color)
 {
     switch(color) {
@@ -61,6 +71,16 @@ void CanvasWidget::changeLineColor(int color)
             currentLineColor = Color(0, 0, 1);
             break;
     }
+    if (!selectedShapes.empty())
+        for(const auto &shape: selectedShapes) {
+            (&*shape)->getStyle().lineColor.setColor(currentLineColor);
+        }
+    update();
+}
+
+void CanvasWidget::changeLineColor(QColor lineColor)
+{
+    currentLineColor = Color(lineColor.red()/255.0,lineColor.green()/255.0,lineColor.blue()/255.0);
     if (!selectedShapes.empty())
         for(const auto &shape: selectedShapes) {
             (&*shape)->getStyle().lineColor.setColor(currentLineColor);
