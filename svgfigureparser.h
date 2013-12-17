@@ -19,8 +19,11 @@ public:
     static QtShape2D* parseFigure(const QDomElement &e) {
         QtShape2D *shape  = NULL;
         //Parse form
-        if (e.tagName() == "rect") {
-            shape =  parseRect(e);
+        if (e.tagName() == "rect")
+            shape = parseRect(e);
+        if (e.tagName() == "polygon") {
+            qDebug() <<"par-m";
+            shape = parsePolygon(e);
 }
         //Style parsing
         float red = 0, green = 0, blue = 0;
@@ -50,7 +53,9 @@ public:
     }
 
     static QtRectangle* parseRect(const QDomElement &node);
-    static QtRectangle* parseRect(const QDomElement &node);
+
+    static QtShape2D *parsePolygon(const QDomElement &node);
+    static QtParallelogram *parseParallelogram(const QDomElement &node);
 
 private:
     QString __content;
