@@ -166,7 +166,10 @@ void CanvasWidget::mouseMoveEvent(QMouseEvent *event) {
             } else if(bottomLeftResize) {
                 selected->resize(currentPoint, 3);
             } else {
-                selected->move(currentPoint - pressedPoint);
+                for(const auto &shape: selectedShapes) //foreach Loop
+                {
+                    (&*shape)->move((&*shape)->getCenter()-selected->getCenter() + currentPoint - pressedPoint);
+                }
 // =======
 //             if(transformation == LEFT_RESIZE) {
 //                 selected->resize(currentPoint, 0);
@@ -221,15 +224,14 @@ void CanvasWidget::mouseReleaseEvent(QMouseEvent *)
     }
 
     update();
-// <<<<<<< HEAD
+
     topLeftResize = false;
     bottomRightResize = false;
     topRightResize = false;
     bottomLeftResize = false;
-// =======
-// >>>>>>> 58591d064c3b898ae4671dd70530a81f8dfeff03
+
+
     controlPointModify = false;
-    // transformation = NONE;
     selected = NULL;
 }
 

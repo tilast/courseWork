@@ -201,6 +201,16 @@ shapesContainer MainWindow::parseXMLTextForSVG(const QString &svgText)
 
                   newContainer.push_back(new QtRectangle(first, second));
               }
+//              else if (tagName == "polygon") {
+//                  double height = e.attribute("height").toDouble();
+//                  double width = e.attribute("width").toDouble();
+//                  double x = e.attribute("x").toDouble();
+//                  double y = e.attribute("y").toDouble();
+//                  Point2D first(x,y);
+//                  Point2D second(x+width,y+height);
+
+//                  newContainer.push_back(new QtRectangle(first, second));
+//              }
           }
           n = n.nextSibling();
       }
