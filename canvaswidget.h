@@ -33,8 +33,10 @@ public:
     void insertShapeInSelectedShapes(QtShape2D* shape);
     bool havingShapeInSelectedShapes(QtShape2D* shape);
     QtShape2D* selected;
+
     int creatingType;
     float defaultOffsetParallelogram;
+
     Color currentLineColor;
     Color currentBackColor;
     DrawStyle currentStyle;

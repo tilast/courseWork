@@ -80,14 +80,10 @@ void MainWindow::deleteSelected()
     qDebug() <<"To delete: "<<selectedShapes->size();
     for(selectedShapesContainer::const_iterator it = selectedShapes->begin(); it != selectedShapes->end(); it++) {
         shapesContainer::iterator itemItr = std::find(shapes->begin(), shapes->end(), *it); //Searching
-        if (itemItr != shapes->end()) {
+        if (itemItr != shapes->end())
             shapes->erase(itemItr);
-            qDebug() <<"Item found";
-        } else {
-            qDebug() <<"Item not found";
-        }
     }
-                update();
+    update();
 }
 
 void MainWindow::setTextToClipboard(const QString &text)
@@ -276,9 +272,6 @@ void MainWindow::createMenus() {
     connect(ui->takeRectangle, SIGNAL(clicked(bool)), this, SLOT(selectRectangle()));
     connect(ui->takeParallelogram, SIGNAL(clicked(bool)), this, SLOT(selectParallelogram()));
     connect(ui->takeRhombus, SIGNAL(clicked(bool)), this, SLOT(selectRhombus()));
-
-    connect(ui->move, SIGNAL(clicked()), this, SLOT(selectMove()));
-    connect(ui->cursor, SIGNAL(clicked()), this, SLOT(selectCursor()));
 
     connect(ui->backBlue, SIGNAL(clicked(bool)), this, SLOT(selectBackBlue()));
     connect(ui->backRed, SIGNAL(clicked(bool)), this, SLOT(selectBackRed()));

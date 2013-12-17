@@ -66,8 +66,6 @@ private slots:
     void selectLineRed();
     void selectLineGreen();
     void selectLineBlue();
-    void selectMove() { instrument = MOVE;  }
-    void selectCursor() { instrument = CURSOR; }
 
 private:
     Ui::MainWindow *ui;
