@@ -277,6 +277,7 @@ void MainWindow::createMenus() {
     connect(ui->takeParallelogram, SIGNAL(clicked(bool)), this, SLOT(selectParallelogram()));
     connect(ui->takeRhombus, SIGNAL(clicked(bool)), this, SLOT(selectRhombus()));
     connect(ui->takeZigzag, SIGNAL(clicked(bool)), this, SLOT(selectZigzag()));
+    connect(ui->takeArrow, SIGNAL(clicked(bool)), this, SLOT(selectArrow()));
 
     connect(ui->colorPanel, SIGNAL(frontColorChanged(QColor)),this,SLOT(selectFillColor(QColor)));
     connect(ui->colorPanel, SIGNAL(backColorChanged(QColor)),this,SLOT(selectLineColor(QColor)));
@@ -436,7 +437,10 @@ void MainWindow::selectZigzag() {
     instrument = FIGURE;
 }
 
-
+void MainWindow::selectArrow() {
+    canvas->changeType(5);
+    instrument = FIGURE;
+}
 
 void MainWindow::setZigzagPointAmount(int amount) {
     canvas->setZigzagPointAmount(amount);

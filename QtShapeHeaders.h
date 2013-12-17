@@ -4,5 +4,7 @@
 #include "qtrectangle.h"
 #include "qtrhombus.h"
 #include "qtparallelogram.h"
+#include "qtzigzag.h"
+#include "qtarrow.h"
 
 #endif // QTSHAPEHEADERS_H

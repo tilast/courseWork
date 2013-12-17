@@ -14,6 +14,7 @@
 #include "qtparallelogram.h"
 #include "qtrhombus.h"
 #include "qtzigzag.h"
+#include "qtarrow.h"
 
 typedef std::vector<QtShape2D*> shapesContainer;
 typedef std::set<QtShape2D*> selectedShapesContainer;

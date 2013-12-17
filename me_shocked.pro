@@ -28,7 +28,9 @@ SOURCES += main.cpp\
     qtzigzag.cpp \
     svgstyleparse.cpp \
     svgparser.cpp \
-    svgfigureparser.cpp
+    svgfigureparser.cpp \
+    arrow.cpp \
+    qtarrow.cpp
 
 HEADERS  += mainwindow.h \
     base.h \
@@ -45,6 +47,8 @@ HEADERS  += mainwindow.h \
     qtzigzag.h \
     svgstyleparse.h \
     svgparser.h \
-    svgfigureparser.h
+    svgfigureparser.h \
+    arrow.h \
+    qtarrow.h
 
 FORMS    += mainwindow.ui

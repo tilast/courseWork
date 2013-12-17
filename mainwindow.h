@@ -62,6 +62,7 @@ private slots:
     void selectParallelogram();
     void selectRhombus();
     void selectZigzag();
+    void selectArrow();
 
     void selectFillColor(QColor newFillColor);
     void selectLineColor(QColor newLineColor);

@@ -31,7 +31,9 @@ SOURCES += main.cpp\
     colordialogbutton.cpp \
     qcolorpalletewidget.cpp \
     zigzag.cpp \
-    qtzigzag.cpp
+    qtzigzag.cpp \
+    arrow.cpp \
+    qtarrow.cpp
 
 HEADERS  += mainwindow.h \
     base.h \
@@ -52,7 +54,9 @@ HEADERS  += mainwindow.h \
     colordialogbutton.h \
     qcolorpalletewidget.h \
     zigzag.h \
-    qtzigzag.h
+    qtzigzag.h \
+    arrow.h \
+    qtarrow.h
 
 FORMS    += mainwindow.ui \
     qcolorpalletewidget.ui
