@@ -43,6 +43,7 @@ HEADERS  += mainwindow.h \
     qtrhombus.h \
     svgstyleparse.h \
     svgfigureparser.h \
-    svgparser.h
+    svgparser.h \
+    QtShapeHeaders.h
 
 FORMS    += mainwindow.ui

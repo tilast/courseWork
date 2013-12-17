@@ -8,7 +8,7 @@ class SVGParser
 {
 public:
     SVGParser();
-    bool checkRegExp(QRegExp rx);
+    bool static checkRegExp(QRegExp rx);
 };
 
 #endif // SVGPARSER_H

@@ -7,11 +7,9 @@ SVGStyleParse::SVGStyleParse(const QString &string)
 
 QStringList SVGStyleParse::getFillColor()
 {
-    QString str = "Я написал 1 число";
     QStringList result;
 
-//    QRegExp rx("((\\d)+)");
-        QRegExp rx("fill:rgb\\(\[\\s\]*(\[\\S\]+),\[\\s\]*(\[\\S\]+),\[\\s\]*(\[\\S\]+)\[\\s\]*\\)");
+    QRegExp rx("fill:rgb\\(\[\\s\]*(\[\\d\\.\]+),\[\\s\]*(\[\\d\\.\]+),\[\\s\]*(\[\\d\\.\]+)\[\\s\]*\\)");
 
     if(!checkRegExp(rx))
         return result;

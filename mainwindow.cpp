@@ -15,6 +15,7 @@
 #include <sstream>
 
 #include <svgstyleparse.h>
+#include <svgfigureparser.h>
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow), canvas(NULL)
 {
@@ -157,45 +158,8 @@ shapesContainer MainWindow::parseXMLTextForSVG(const QString &svgText)
       while( !n.isNull() ) {
           QDomElement e = n.toElement(); // try to convert the node to an element.
           if( !e.isNull() ) { // the node was really an element.
-              QString tagName = e.tagName();
-              float red = 0, green = 0, blue = 0;
-              QtShape2D *shape = NULL;
 
-              if (!e.attribute("style").isEmpty()) {
-
-                  QString style  = e.attribute("style");
-                  SVGStyleParse styleParse(style); //Parse style Css
-                  if (!style.isEmpty()) {
-
-                      //Fill color
-                    QStringList fillColorStr = styleParse.getFillColor();
-                    if (!fillColorStr.isEmpty()) {
-                        red = fillColorStr[1].toFloat() / 255.0;
-                        green = fillColorStr[2].toFloat() / 255.0;
-                        blue = fillColorStr[3].toFloat() / 255.0;
-                   }
-                  }
-
-              }
-              Color fillColor(red, green, blue);
-
-              if (tagName == "rect") {
-
-                  double height = e.attribute("height").toDouble();
-                  double width = e.attribute("width").toDouble();
-                  double x = e.attribute("x").toDouble();
-                  double y = e.attribute("y").toDouble();
-                  Point2D first(x,y);
-                  Point2D second(x+width,y+height);
-
-                  shape = new QtRectangle(first, second);
-              }
-
-              else if (tagName == "polygon") {
-
-//                   <polygon points=\"%1,%2  %3,%4 %5,%6  %7,%8\" style=\"fill:rgb(%9, %10, %11)\" abki=\"parallelogram\" />
-              }
-              shape->getStyle().setStyle(fillColor, fillColor);
+              QtShape2D *shape = SVGFigureParser::parseFigure(e);
               if (shape != NULL)
                   newContainer.push_back(shape);
           }
