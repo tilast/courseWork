@@ -7,8 +7,6 @@
 QT       += core gui
 QT       += xml
 
-INCLUDEPATH += ":\\wwWidgets\\widgets"
-
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = me_shocked
@@ -25,7 +23,8 @@ SOURCES += main.cpp\
     canvaswidget.cpp \
     qtparallelogram.cpp \
     parallelogram.cpp \
-    qsvgparser.cpp
+    qsvgparser.cpp \
+    qtrhombus.cpp
 
 HEADERS  += mainwindow.h \
     base.h \
@@ -37,6 +36,7 @@ HEADERS  += mainwindow.h \
     canvaswidget.h \
     qtparallelogram.h \
     parallelogram.h \
-    qsvgparser.h
+    qsvgparser.h \
+    qtrhombus.h
 
 FORMS    += mainwindow.ui
