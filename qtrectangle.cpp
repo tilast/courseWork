@@ -8,6 +8,12 @@ QtRectangle::QtRectangle(const Point2D& p1, const Point2D& p2) : Rectangle(p1, p
 void QtRectangle::draw(QPainter &painter) const {
     Point2D tl = Rectangle::center - Rectangle::size * 0.5;
     Point2D br = Rectangle::center + Rectangle::size * 0.5;
+    Point2D tr;
+    tr.y = Rectangle::center.y - Rectangle::size.y * 0.5;
+    tr.x = Rectangle::center.x + Rectangle::size.x * 0.5;
+    Point2D bl;
+    bl.y = Rectangle::center.y + Rectangle::size.y * 0.5;
+    bl.x = Rectangle::center.x - Rectangle::size.x * 0.5;
     Color p = getStyle().lineColor;
     Color f = getStyle().fillColor;
     if (isSelected()) f.alpha = 0.5;
@@ -18,6 +24,8 @@ void QtRectangle::draw(QPainter &painter) const {
         painter.setBrush(QBrush(QColor(255, 180, 120)));
         painter.drawEllipse(QPoint(tl.x, tl.y), 2, 2);
         painter.drawEllipse(QPoint(br.x, br.y), 2, 2);
+        painter.drawEllipse(QPoint(tr.x, tr.y), 2, 2);
+        painter.drawEllipse(QPoint(bl.x, bl.y), 2, 2);
     }
 }
 
@@ -33,6 +41,23 @@ bool QtRectangle::isBottomRight(Point2D pressedPoint, Point2D epsilon) const {
     Point2D minBR = br - epsilon;
     Point2D maxBR = br + epsilon;
     return ((pressedPoint.x > minBR.x) && (pressedPoint.y > minBR.y) && (pressedPoint.x < maxBR.x) && (pressedPoint.y < maxBR.y));
+}
+bool QtRectangle::isTopRight(Point2D pressedPoint, Point2D epsilon) const {
+    Point2D tr;
+    tr.y = Rectangle::center.y - Rectangle::size.y * 0.5;
+    tr.x = Rectangle::center.x + Rectangle::size.x * 0.5;
+    Point2D minTR = tr - epsilon;
+    Point2D maxTR = tr + epsilon;
+    return ((pressedPoint.x > minTR.x) && (pressedPoint.y > minTR.y) && (pressedPoint.x < maxTR.x) && (pressedPoint.y < maxTR.y));
+}
+
+bool QtRectangle::isBottomLeft(Point2D pressedPoint, Point2D epsilon) const {
+    Point2D bl;
+    bl.y = Rectangle::center.y + Rectangle::size.y * 0.5;
+    bl.x = Rectangle::center.x - Rectangle::size.x * 0.5;
+    Point2D minBL = bl - epsilon;
+    Point2D maxBL = bl + epsilon;
+    return ((pressedPoint.x > minBL.x) && (pressedPoint.y > minBL.y) && (pressedPoint.x < maxBL.x) && (pressedPoint.y < maxBL.y));
 }
 
 void QtRectangle::select(bool sel) {

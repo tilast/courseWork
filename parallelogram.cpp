@@ -32,6 +32,8 @@ void Parallelogram::resize(const Point2D& destination, short t) {
 bool Parallelogram::belongs(const Point2D& p) {
     Point2D p1 = center - size * 0.5;
     Point2D p2 = center + size * 0.5;
+    p1.x -= fabs(controlPoint);
+    p2.x += fabs(controlPoint);
 
     return ((p1.x <= p.x) && (p1.y <= p.y) &&
             (p2.x >= p.x) && (p2.y >= p.y));

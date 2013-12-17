@@ -4,10 +4,16 @@
 CanvasWidget::CanvasWidget(QWidget *parent) :
     QWidget(parent), selected(NULL), creating(false)
 {
-    epsilon.x = 50;
-    epsilon.y = 50;
+    epsilon.x = 20;
+    epsilon.y = 20;
     creatingType = 1;
     defaultOffsetParallelogram = 30.0;
+    currentBackColor = Color(.5, .5, .5, 1);
+    currentLineColor = Color(.0, .0, .5, 1);
+
+    currentStyle.fillColor = currentBackColor;
+    currentStyle.lineColor = currentLineColor;
+    currentStyle.setStyle(currentLineColor);
 }
 
 CanvasWidget::~CanvasWidget() {
@@ -19,6 +25,45 @@ CanvasWidget::~CanvasWidget() {
 void CanvasWidget::changeType(int type)
 {
     creatingType = type;
+}
+void CanvasWidget::changeBackColor(int color)
+{
+    switch(color) {
+        case 1 :
+            currentBackColor = Color(1, 0, 0);
+            break;
+        case 2 :
+            currentBackColor = Color(0, 1, 0);
+            break;
+        case 3 :
+            currentBackColor = Color(0, 0, 1);
+            break;
+    }
+
+    if(selected) {
+        selected->getStyle().fillColor.setColor(currentBackColor);
+
+        update();
+    }
+}
+void CanvasWidget::changeLineColor(int color)
+{
+    switch(color) {
+        case 1 :
+            currentLineColor = Color(1, 0, 0);
+            break;
+        case 2 :
+            currentLineColor = Color(0, 1, 0);
+            break;
+        case 3 :
+            currentLineColor = Color(0, 0, 1);
+            break;
+    }
+
+    if(selected) {
+        selected->getStyle().lineColor.setColor(currentLineColor);
+        update();
+    }
 }
 void CanvasWidget::selectAll() {
     selectedShapes.clear();
@@ -52,9 +97,13 @@ void CanvasWidget::mousePressEvent(QMouseEvent *event) {
             qDebug() <<selectedShapes.size();
 
             if(selected->isTopLeft(pressedPoint, epsilon)) {
-                leftResize = true;
+                topLeftResize = true;
             } else if(selected->isBottomRight(pressedPoint, epsilon)) {
-                rightResize = true;
+                bottomRightResize = true;
+            } else if(selected->isBottomLeft(pressedPoint, epsilon)) {
+//                bottomLeftResize = true;
+            } else if(selected->isTopRight(pressedPoint, epsilon)) {
+//                topRightResize = true;
             }
 
             if(selected->getType() == 2) {
@@ -79,12 +128,16 @@ void CanvasWidget::mouseMoveEvent(QMouseEvent *event) {
         if(creating) {
             shapes.back()->setBounds(pressedPoint, currentPoint);
         } else if(selected) {
-            if(leftResize) {
-                selected->resize(currentPoint, 0);
-            } else if(rightResize) {
-                selected->resize(currentPoint, 1);
-            } else if(controlPointModify) {
+            if(controlPointModify) {
                 ((QtParallelogram*)selected)->setControlPoint(currentPoint.x);
+            } else if(topLeftResize) {
+                selected->resize(currentPoint, 0);
+            } else if(bottomRightResize) {
+                selected->resize(currentPoint, 1);
+            } else if(topRightResize) {
+                selected->resize(currentPoint, 2);
+            } else if(bottomLeftResize) {
+                selected->resize(currentPoint, 3);
             } else {
                 selected->move(currentPoint - pressedPoint);
             }
@@ -99,6 +152,8 @@ void CanvasWidget::mouseMoveEvent(QMouseEvent *event) {
                     break;
             }
 
+            selected->getStyle().lineColor.setColor(currentLineColor);
+            selected->getStyle().fillColor.setColor(currentBackColor);
             shapes.push_back(selected);
             selected->select(true);
 
@@ -119,8 +174,10 @@ void CanvasWidget::mouseReleaseEvent(QMouseEvent *) {
     }
 
     update();
-    leftResize = false;
-    rightResize = false;
+    topLeftResize = false;
+    bottomRightResize = false;
+    topRightResize = false;
+    bottomLeftResize = false;
     controlPointModify = false;
 }
 

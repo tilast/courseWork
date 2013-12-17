@@ -29,8 +29,13 @@ public:
     QtShape2D* selected;
     int creatingType;
     float defaultOffsetParallelogram;
+    Color currentLineColor;
+    Color currentBackColor;
+    DrawStyle currentStyle;
 
     void changeType(int type);
+    void changeBackColor(int color);
+    void changeLineColor(int color);
     bool isModified() { return __isModified; }
     void setModified(bool flag) { __isModified = flag; }
     void selectAll();
@@ -50,7 +55,7 @@ protected:
     Point2D pressedPoint, epsilon;
     bool creating;
 
-    bool leftResize, rightResize, controlPointModify;
+    bool topLeftResize, bottomRightResize, topRightResize, bottomLeftResize, controlPointModify;
 
     void toFront(int number);
 

@@ -22,6 +22,8 @@ public:
     bool isSelected() const;
     bool isTopLeft(Point2D pressedPoint, Point2D epsilon) const;
     bool isBottomRight(Point2D pressedPoint, Point2D epsilon) const;
+    bool isTopRight(Point2D pressedPoint, Point2D epsilon) const;
+    bool isBottomLeft(Point2D pressedPoint, Point2D epsilon) const;
     bool isControlPoint(Point2D pressedPoint, Point2D epsilon) const;
     void setControlPoint(const float &cp);
     void setType();

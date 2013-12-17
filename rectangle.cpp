@@ -14,13 +14,27 @@ void Rectangle::move(const Point2D& destination) {
 }
 
 void Rectangle::resize(const Point2D& destination, short t) {
-    Point2D p1 = center - size * 0.5;
-    Point2D p2 = center + size * 0.5;
-    Point2D test = destination;
-    if(t) {
-        setBounds(p1, test);
-    } else {
-        setBounds(test, p2);
+    Point2D tl = center - size * 0.5;
+    Point2D br = center + size * 0.5;
+    Point2D tr;
+    Point2D delta;
+    tr.y = Rectangle::center.y - Rectangle::size.y * 0.5;
+    tr.x = Rectangle::center.x + Rectangle::size.x * 0.5;
+    Point2D bl;
+    bl.y = Rectangle::center.y + Rectangle::size.y * 0.5;
+    bl.x = Rectangle::center.x - Rectangle::size.x * 0.5;
+    if(t == 0) {
+        setBounds(destination, br);
+    } else if(t == 1) {
+        setBounds(tl, destination);
+    } else if(t == 2) {
+        tl.y = destination.y;
+        br.x = destination.x;
+        setBounds(tl, br);
+    } else if(t == 3) {
+        tl.x = destination.x;
+        br.y = destination.y;
+        setBounds(tl, br);
     }
 }
 

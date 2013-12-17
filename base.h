@@ -16,6 +16,23 @@ struct Color {
     Color(ColorChannel red, ColorChannel green, ColorChannel blue,
           ColorChannel alpha = 1.
           );
+    Color() {
+
+    }
+
+    void setColor(ColorChannel r, ColorChannel g, ColorChannel b,
+                  ColorChannel a = 1.) {
+        red = r;
+        green = g;
+        blue = b;
+        alpha = a;
+    }
+    void setColor(Color color) {
+        red = color.red;
+        green = color.green;
+        blue = color.blue;
+        alpha = color.alpha;
+    }
 
     static const Color blackColor;
     static const Color whiteColor;
@@ -28,6 +45,15 @@ struct DrawStyle {
 
     DrawStyle(Color lineColor = Color::blackColor,
               Color fillColor = Color::grayColor);
+
+    void setStyle(Color line, Color fill) {
+        lineColor = line;
+        fillColor = fill;
+    }
+    void setStyle(DrawStyle d) {
+        lineColor = d.lineColor;
+        fillColor = d.fillColor;
+    }
 };
 
 ///////////////

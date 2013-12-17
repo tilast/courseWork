@@ -55,6 +55,14 @@ private slots:
     void selectRectangle();
     void selectParallelogram();
 
+    void selectBackRed();
+    void selectBackGreen();
+    void selectBackBlue();
+
+    void selectLineRed();
+    void selectLineGreen();
+    void selectLineBlue();
+
 private:
     Ui::MainWindow *ui;
     CanvasWidget *canvas;

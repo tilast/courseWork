@@ -133,6 +133,16 @@ bool MainWindow::parseXMLForSVG(const QString &filename)
 
                     canvas->shapes.push_back(new QtRectangle(first, second));
                 }
+//                if (xml.name() == "polygon") {
+//                    double height = xml.attributes().value("height").toString().toDouble();
+//                    double width = xml.attributes().value("width").toString().toDouble();
+//                    double x = xml.attributes().value("x").toString().toDouble();
+//                    double y = xml.attributes().value("y").toString().toDouble();
+//                    Point2D first(x,y);
+//                    Point2D second(x+width,y+height);
+
+//                    canvas->shapes.push_back(new QtRectangle(first, second));
+//                }
             }
         }
     return true;
@@ -245,7 +255,36 @@ void MainWindow::createMenus() {
     qDebug() <<"menu creation";
     connect(ui->takeRectangle, SIGNAL(clicked(bool)), this, SLOT(selectRectangle()));
     connect(ui->takeParallelogram, SIGNAL(clicked(bool)), this, SLOT(selectParallelogram()));
+
+    connect(ui->backBlue, SIGNAL(clicked(bool)), this, SLOT(selectBackBlue()));
+    connect(ui->backRed, SIGNAL(clicked(bool)), this, SLOT(selectBackRed()));
+    connect(ui->backGreen, SIGNAL(clicked(bool)), this, SLOT(selectBackGreen()));
+
+    connect(ui->lineBlue, SIGNAL(clicked(bool)), this, SLOT(selectLineBlue()));
+    connect(ui->lineRed, SIGNAL(clicked(bool)), this, SLOT(selectLineRed()));
+    connect(ui->lineGreen, SIGNAL(clicked(bool)), this, SLOT(selectLineGreen()));
 }
+
+void MainWindow::selectBackRed() {
+    canvas->changeBackColor(1);
+}
+void MainWindow::selectBackGreen() {
+    canvas->changeBackColor(2);
+}
+void MainWindow::selectBackBlue() {
+    canvas->changeBackColor(3);
+}
+
+void MainWindow::selectLineRed() {
+    canvas->changeLineColor(1);
+}
+void MainWindow::selectLineGreen() {
+    canvas->changeLineColor(2);
+}
+void MainWindow::selectLineBlue() {
+    canvas->changeLineColor(3);
+}
+
 void MainWindow::createActions()
 {
     newAct = this->findChild<QAction*>("actionNew");
