@@ -75,7 +75,8 @@ void CanvasWidget::mousePressEvent(QMouseEvent *event) {
 
             if (transformation == LEFT_RESIZE || transformation == RIGHT_RESIZE) //Оставляем только одну выделенную фигуру6 которую хотим масштабировать
                 clearSelectedShapes();
-
+            if (havingShapeInSelectedShapes(selected))
+                transformation = MOVING;
              insertShapeInSelectedShapes(selected);
 
             if(selected->getType() == 2) {
