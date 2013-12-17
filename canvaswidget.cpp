@@ -290,12 +290,24 @@ void CanvasWidget::reflect() {
     update();
 }
 
+void CanvasWidget::setArrowsTipCoefficient(float coef)
+{
+    arrowsTipCoefficient = coef;
+    for(const auto &shape: selectedShapes) //foreach Loop
+    {
+        if((&*shape)->getType() == 5) {
+            qDebug() << "set coef";
+            ((QtArrow*)(&*shape))->setTipCoef(coef);
+            update();
+        }
+    }
+}
+
 void CanvasWidget::setZigzagPointAmount(int amount) {
     zigzagPointsAmount = amount;
 
     for(const auto &shape: selectedShapes) //foreach Loop
     {
-        qDebug() << "all is okay ";
         if((&*shape)->getType() == 4) {
             ((QtZigzag*)(&*shape))->setPointsAmount(amount);
             update();

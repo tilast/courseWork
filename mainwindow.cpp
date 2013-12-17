@@ -283,12 +283,18 @@ void MainWindow::createMenus() {
     connect(ui->colorPanel, SIGNAL(backColorChanged(QColor)),this,SLOT(selectLineColor(QColor)));
 
     connect(ui->zigzagPoints, SIGNAL(valueChanged(int)), this, SLOT(setZigzagPointAmount(int)));
+    connect(ui->arrowsTipCoefficient, SIGNAL(valueChanged(double)), this, SLOT(setArrowsTipCoeficient(double)));
 
     connect(ui->reflect, SIGNAL(clicked(bool)), this, SLOT(reflect()));
 }
 
 void MainWindow::reflect() {
     canvas->reflect();
+}
+
+void MainWindow::setArrowsTipCoeficient(double coef)
+{
+    canvas->setArrowsTipCoefficient(coef);
 }
 
 void MainWindow::createActions()

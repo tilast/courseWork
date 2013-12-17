@@ -69,6 +69,7 @@ private slots:
 
     void reflect();
 
+    void setArrowsTipCoeficient(double coef);
     void setZigzagPointAmount(int amount);
 
 

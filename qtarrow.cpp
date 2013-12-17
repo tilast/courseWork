@@ -1,4 +1,5 @@
 #include "qtarrow.h"
+#include <sstream>
 
 #include <QDebug>
 
@@ -25,8 +26,6 @@ void QtArrow::draw(QPainter &painter) const {
     if (isSelected()) f.alpha = 0.5;
     painter.setPen(QColor(p.red * 255, p.green * 255, p.blue * 255, p.alpha * 255));
     painter.setBrush(QBrush(QColor(f.red * 255, f.green * 255, f.blue * 255, f.alpha * 255)));
-
-    float tipCoef = 0.2;
 
     Point2D leftPoint;
     leftPoint.x = tl.x;
@@ -134,5 +133,8 @@ int QtArrow::getType() {
 }
 
 QString QtArrow::svgElementCode() const {
-    return QString("lkfjvlk");
+    return QString("")
+            .append("<arrow>")
+            .append("")
+            .append("</arrow>");
 }
