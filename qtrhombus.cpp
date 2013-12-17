@@ -1,6 +1,8 @@
 #include "qtrhombus.h"
 
-QtRhombus::QtRhombus(const Point2D &p1, const Point2D &p2) : QtRectangle(p1, p2) {}
+QtRhombus::QtRhombus(const Point2D &p1, const Point2D &p2) : QtRectangle(p1, p2) {
+    setType();
+}
 
 void QtRhombus::draw(QPainter &painter) const {
     Point2D tl = Rectangle::center - Rectangle::size * 0.5;

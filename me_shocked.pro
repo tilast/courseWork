@@ -23,7 +23,9 @@ SOURCES += main.cpp\
     canvaswidget.cpp \
     parallelogram.cpp \
     qtparallelogram.cpp \
-    qtrhombus.cpp
+    qtrhombus.cpp \
+    zigzag.cpp \
+    qtzigzag.cpp
 
 HEADERS  += mainwindow.h \
     base.h \
@@ -35,6 +37,8 @@ HEADERS  += mainwindow.h \
     canvaswidget.h \
     parallelogram.h \
     qtparallelogram.h \
-    qtrhombus.h
+    qtrhombus.h \
+    zigzag.h \
+    qtzigzag.h
 
 FORMS    += mainwindow.ui

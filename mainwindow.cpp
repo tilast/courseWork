@@ -328,6 +328,7 @@ void MainWindow::createMenus() {
     connect(ui->takeRectangle, SIGNAL(clicked(bool)), this, SLOT(selectRectangle()));
     connect(ui->takeParallelogram, SIGNAL(clicked(bool)), this, SLOT(selectParallelogram()));
     connect(ui->takeRhombus, SIGNAL(clicked(bool)), this, SLOT(selectRhombus()));
+    connect(ui->takeZigzag, SIGNAL(clicked(bool)), this, SLOT(selectZigzag()));
 
     connect(ui->move, SIGNAL(clicked()), this, SLOT(selectMove()));
     connect(ui->cursor, SIGNAL(clicked()), this, SLOT(selectCursor()));
@@ -339,6 +340,8 @@ void MainWindow::createMenus() {
     connect(ui->lineBlue, SIGNAL(clicked(bool)), this, SLOT(selectLineBlue()));
     connect(ui->lineRed, SIGNAL(clicked(bool)), this, SLOT(selectLineRed()));
     connect(ui->lineGreen, SIGNAL(clicked(bool)), this, SLOT(selectLineGreen()));
+
+    connect(ui->zigzagPoints, SIGNAL(valueChanged(int)), this, SLOT(setZigzagPointAmount(int)));
 }
 
 void MainWindow::selectBackRed() {
@@ -491,4 +494,11 @@ void MainWindow::selectParallelogram() {
 void MainWindow::selectRhombus() {
     canvas->changeType(3);
     instrument = FIGURE;
+}
+void MainWindow::selectZigzag() {
+    canvas->changeType(4);
+    instrument = FIGURE;
+}
+void MainWindow::setZigzagPointAmount(int amount) {
+    canvas->setZigzagPointAmount(amount);
 }

@@ -7,6 +7,7 @@ CanvasWidget::CanvasWidget(QWidget *parent) :
     epsilon.x = 20;
     epsilon.y = 20;
     creatingType = 1;
+    zigzagPointsAmount = 5;
     defaultOffsetParallelogram = 30.0;
     currentBackColor = Color(.5, .5, .5, 1);
     currentLineColor = Color(.0, .0, .5, 1);
@@ -197,6 +198,8 @@ void CanvasWidget::mouseMoveEvent(QMouseEvent *event) {
                 case 3:
                     selected = new QtRhombus(pressedPoint, pressedPoint);
                     break;
+                case 4:
+                    selected = new QtZigzag(pressedPoint, pressedPoint, zigzagPointsAmount);
             }
 
             selected->getStyle().lineColor.setColor(currentLineColor);
@@ -252,4 +255,17 @@ void CanvasWidget::toFront(int number) {
 
     /////////////////
     setModified(true);
+}
+
+void CanvasWidget::setZigzagPointAmount(int amount) {
+    zigzagPointsAmount = amount;
+
+    for(const auto &shape: selectedShapes) //foreach Loop
+    {
+        qDebug() << "all is okay ";
+        if((&*shape)->getType() == 4) {
+            ((QtZigzag*)(&*shape))->setPointsAmount(amount);
+            update();
+        }
+    }
 }

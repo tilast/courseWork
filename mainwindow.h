@@ -57,10 +57,13 @@ private slots:
     void selectRectangle();
     void selectParallelogram();
     void selectRhombus();
+    void selectZigzag();
 
     void selectBackRed();
     void selectBackGreen();
     void selectBackBlue();
+
+    void setZigzagPointAmount(int amount);
 
     void selectLineRed();
     void selectLineGreen();
