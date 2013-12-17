@@ -21,10 +21,12 @@ public:
         //Parse form
         if (e.tagName() == "rect")
             shape = parseRect(e);
-        if (e.tagName() == "polygon") {
-            qDebug() <<"par-m";
+        if (e.tagName() == "polygon")
             shape = parsePolygon(e);
-}
+
+        if (shape == NULL)
+            return NULL;
+
         //Style parsing
         float red = 0, green = 0, blue = 0;
         if (!e.attribute("style").isEmpty()) {
@@ -52,10 +54,11 @@ public:
         return shape;
     }
 
-    static QtRectangle* parseRect(const QDomElement &node);
+    static QtRectangle* parseRect(const QDomElement &element);
 
-    static QtShape2D *parsePolygon(const QDomElement &node);
-    static QtParallelogram *parseParallelogram(const QDomElement &node);
+    static QtShape2D *parsePolygon(const QDomElement &element);
+    static QtParallelogram *parseParallelogram(const QDomElement &element);
+    static QtRhombus *parseRhombus(const QDomElement &element);
 
 private:
     QString __content;

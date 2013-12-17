@@ -52,5 +52,20 @@ void QtRhombus::draw(QPainter &painter) const {
 }
 
 QString QtRhombus::svgElementCode() const {
-    return QString("kjsdfhkjdf");
+    Point2D center = getCenter();
+    Point2D size = getSize();
+
+    Point2D left = center, right = center, top = center, bottom = center;
+
+    left.x -= size.x/2;
+    right.x += size.x/2;
+    top.y += size.y/2;
+    bottom.y -= size.y/2;
+
+    return QString("<polygon points=\"%1,%2  %3,%4 %5,%6  %7,%8\" style=\"fill:rgb(%9, %10, %11)\" abki=\"rhombus\" />")
+            .arg(left.x).arg(left.y)
+            .arg(top.x).arg(top.y)
+            .arg(right.x).arg(right.y)
+            .arg(bottom.x).arg(bottom.y)
+            .arg(getStyle().fillColor.red*255).arg(getStyle().fillColor.green*255).arg(getStyle().fillColor.blue*255);
 }

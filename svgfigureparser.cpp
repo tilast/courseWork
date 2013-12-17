@@ -34,6 +34,9 @@ QtShape2D *SVGFigureParser::parsePolygon(const QDomElement &e)
         return NULL;
     if (e.attribute("abki") == "parallelogram")
         return parseParallelogram(e);
+    if (e.attribute("abki") == "rhombus")
+        return parseRhombus(e);
+    return NULL;
 
 }
 
@@ -47,11 +50,26 @@ QtParallelogram *SVGFigureParser::parseParallelogram(const QDomElement &e)
 
     QStringList points = parsePoints(e.attribute("points"));
     qDebug() <<points;
-    if(points.size() != 8) //8 points coordinates + 1 - full string
+    if(points.size() != 8) //8 points coordinates
         return NULL;
     qDebug() <<"Parse points";
     Point2D leftTop(points[6].toFloat(),points[1].toFloat());
     Point2D rightBottom(points[4].toFloat(),points[5].toFloat());
     float cp = points[0].toFloat()-points[6].toFloat();
     return new QtParallelogram(leftTop, rightBottom, cp);
+}
+
+QtRhombus *SVGFigureParser::parseRhombus(const QDomElement &e)
+{
+//    <polygon points=\"%1,%2  %3,%4 %5,%6  %7,%8\" style=\"fill:rgb(%9, %10, %11)\" abki=\"rhombus\" />
+//    points: left , top , right , bottom
+    if (e.tagName() != "polygon" || e.attribute("abki") != "rhombus")
+        return NULL;
+
+    QStringList points = parsePoints(e.attribute("points"));
+    if(points.size() != 8) //8 points coordinates
+        return NULL;
+    Point2D leftTop(points[0].toFloat(),points[3].toFloat());
+    Point2D rightBottom(points[4].toFloat(),points[7].toFloat());
+    return new QtRhombus(leftTop, rightBottom);
 }
