@@ -16,7 +16,7 @@ public:
     void move(const Point2D& destination);
     void resize(const Point2D& destination, short t);
     bool belongs(const Point2D& point);
-    void draw(QPainter & painter) const;
+    virtual void draw(QPainter & painter) const;
     void select(bool sel);
     bool isSelected() const;
     bool isTopLeft(Point2D pressedPoint, Point2D epsilon) const;

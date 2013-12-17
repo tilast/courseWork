@@ -22,7 +22,8 @@ SOURCES += main.cpp\
     qtrectangle.cpp \
     canvaswidget.cpp \
     parallelogram.cpp \
-    qtparallelogram.cpp
+    qtparallelogram.cpp \
+    qtrhombus.cpp
 
 HEADERS  += mainwindow.h \
     base.h \
@@ -33,6 +34,7 @@ HEADERS  += mainwindow.h \
     qtrectangle.h \
     canvaswidget.h \
     parallelogram.h \
-    qtparallelogram.h
+    qtparallelogram.h \
+    qtrhombus.h
 
 FORMS    += mainwindow.ui

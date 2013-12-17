@@ -149,7 +149,7 @@ QString QtParallelogram::svgElementCode() const {
     d.x = tl.x;
     d.y = br.y;
 
-    return QString("<polygon points=\"%1,%2  %3,%4 %5,%6  %7,%8\" style=\"fill:rgb(%9, %10, %11)\" />")
+    return QString("<polygon points=\"%1,%2  %3,%4 %5,%6  %7,%8\" style=\"fill:rgb(%9, %10, %11)\" abki=\"parallelogram\" />")
             .arg(a.x).arg(a.y)
             .arg(b.x).arg(b.y)
             .arg(c.x).arg(c.y)

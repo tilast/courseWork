@@ -91,6 +91,13 @@
          </property>
         </widget>
        </item>
+       <item>
+        <widget class="QRadioButton" name="takeRhombus">
+         <property name="text">
+          <string>Rhombus</string>
+         </property>
+        </widget>
+       </item>
       </layout>
      </item>
     </layout>

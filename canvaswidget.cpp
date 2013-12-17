@@ -194,6 +194,9 @@ void CanvasWidget::mouseMoveEvent(QMouseEvent *event) {
                 case 1:
                     selected = new QtRectangle(pressedPoint, pressedPoint);
                     break;
+                case 3:
+                    selected = new QtRhombus(pressedPoint, pressedPoint);
+                    break;
             }
 
             selected->getStyle().lineColor.setColor(currentLineColor);
