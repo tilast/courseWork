@@ -15,14 +15,17 @@ QColorPalleteWidget::~QColorPalleteWidget()
     delete ui;
 }
 
+void QColorPalleteWidget::setFrontColor(QColor color) {__frontColor = color; ui->frontColor->setColor(color);}
+void QColorPalleteWidget::setBackColor(QColor color) {__backColor = color; ui->backColor->setColor(color);}
+
 void QColorPalleteWidget::frontColorWasChanged(QColor newColor)
 {
-    __frontColor = newColor;
+    setFrontColor(newColor);
     emit frontColorChanged(newColor);
 }
 
 void QColorPalleteWidget::backColorWasChanged(QColor newColor)
 {
-    __backColor = newColor;
+    setBackColor(newColor);
     emit backColorChanged(newColor);
 }

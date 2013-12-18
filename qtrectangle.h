@@ -25,7 +25,7 @@ public:
     bool isTopRight(Point2D pressedPoint, Point2D epsilon) const;
     bool isBottomLeft(Point2D pressedPoint, Point2D epsilon) const;
     void setType();
-    int getType();
+    virtual int getType();
     virtual QString svgElementCode() const {
         Point2D center = getCenter();
         Point2D size = getSize();

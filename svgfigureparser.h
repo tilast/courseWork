@@ -23,6 +23,8 @@ public:
             shape = parseRect(e);
         if (e.tagName() == "polygon")
             shape = parsePolygon(e);
+        if (e.tagName() == "polyline")
+            shape = parseCurve(e);
 
         if (shape == NULL)
             return NULL;
@@ -55,11 +57,14 @@ public:
     }
 
     static QtRectangle* parseRect(const QDomElement &element);
-
+//Polygons
     static QtShape2D *parsePolygon(const QDomElement &element);
     static QtParallelogram *parseParallelogram(const QDomElement &element);
     static QtRhombus *parseRhombus(const QDomElement &element);
-
+//Polylines
+    static QtZigzag *parseCurve(const QDomElement &element);
+//Arrow
+    static QtArrow *parseArrow(const QDomElement &element);
 private:
     QString __content;
 };

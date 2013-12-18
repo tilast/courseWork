@@ -24,6 +24,10 @@ enum CanvasWidgetActionType {NONE = 0,CREATING = 1, MOVING = 2, LEFT_RESIZE = 3,
 class CanvasWidget : public QWidget
 {
     Q_OBJECT
+signals:
+
+    void shapeSelected(int type);
+
 public:
     explicit CanvasWidget(QWidget *parent = 0);
     ~CanvasWidget();
@@ -51,6 +55,9 @@ public:
     void changeBackColor(QColor backColor);
     void changeLineColor(int color);
     void changeLineColor(QColor lineColor);
+
+    void updateStyle();
+
     void reflect();
     void setArrowsTipCoefficient(float coef);
     bool isModified() { return __isModified; }

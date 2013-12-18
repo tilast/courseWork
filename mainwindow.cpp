@@ -4,6 +4,7 @@
 #include <QMessageBox>
 #include <QFileDialog>
 #include <QXmlStreamReader>
+#include <QLineEdit>
 
 #include <QtXml/qdom.h>
 
@@ -24,13 +25,39 @@
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow), canvas(NULL)
 {
     ui->setupUi(this);
-    canvas = this->findChild<CanvasWidget*>("mainCanvas");
+    canvas = ui->mainCanvas;
 
+    connect(canvas,SIGNAL(shapeSelected(int)),this,SLOT(selectShape(int)));
+
+    QColor frontColor(canvas->currentBackColor.red * 255.0,canvas->currentBackColor.green* 255.0,canvas->currentBackColor.blue* 255.0);
+    QColor backColor(canvas->currentLineColor.red * 255.0,canvas->currentLineColor.green* 255.0,canvas->currentLineColor.blue* 255.0);
+    qDebug() <<frontColor;
+    ui->colorPanel->setFrontColor(frontColor);
+    ui->colorPanel->setBackColor(backColor);
     createActions();
     createMenus();
 
     setCurrentFile("Untitled");
     setUnifiedTitleAndToolBarOnMac(true);
+
+
+}
+
+bool MainWindow::eventFilter( QObject * o, QEvent * e ) {
+    if ( e->type() == QEvent::Wheel &&
+         qobject_cast<QAbstractSpinBox*>( o ) )
+    {
+        e->ignore();
+        return true;
+    }
+    qDebug() <<"event filter";
+    return QWidget::eventFilter( o, e );
+}
+
+void MainWindow::shapeDefault()
+{
+    ui->arrowsTipCoefficient->setEnabled(false);
+    ui->zigzagPoints->setEnabled(false);
 }
 
 MainWindow::~MainWindow()
@@ -40,8 +67,10 @@ MainWindow::~MainWindow()
 void MainWindow::keyReleaseEvent(QKeyEvent * event) {
     canvas->pressedKeyCode = 0;
 }
+
 void MainWindow::keyPressEvent(QKeyEvent* event)
 {
+    qDebug() <<"Key pressed";
     canvas->pressedKeyCode = event->key();
     switch (event->key())
       {
@@ -67,6 +96,7 @@ void MainWindow::keyPressEvent(QKeyEvent* event)
 
         qDebug() <<"------------------ (deleting shape)";
         deleteSelected();
+        canvas->update();
         qDebug() <<"------------------";
 
         break;
@@ -87,7 +117,8 @@ void MainWindow::deleteSelected()
         if (itemItr != shapes->end())
             shapes->erase(itemItr);
     }
-    update();
+//    update();
+    canvas->update();
 }
 
 void MainWindow::setTextToClipboard(const QString &text)
@@ -282,6 +313,7 @@ void MainWindow::createMenus() {
     connect(ui->colorPanel, SIGNAL(frontColorChanged(QColor)),this,SLOT(selectFillColor(QColor)));
     connect(ui->colorPanel, SIGNAL(backColorChanged(QColor)),this,SLOT(selectLineColor(QColor)));
 
+
     connect(ui->zigzagPoints, SIGNAL(valueChanged(int)), this, SLOT(setZigzagPointAmount(int)));
     connect(ui->arrowsTipCoefficient, SIGNAL(valueChanged(double)), this, SLOT(setArrowsTipCoeficient(double)));
 
@@ -346,7 +378,7 @@ void MainWindow::open() //Open file
         canvas->shapes.clear();
         canvas->shapes = parseXMLFileForSVG(curFileName);
     }
-    update();
+    canvas->update();
 }
 
 void MainWindow::close() { //Closing file
@@ -401,7 +433,7 @@ void MainWindow::paste()
     shapesContainer newShapes = parseXMLTextForSVG(clipText);
     canvas->shapes.insert(canvas->shapes.end(),newShapes.begin(), newShapes.end());
 
-    update();
+    canvas->update();
 
 
 }
@@ -417,6 +449,29 @@ void MainWindow::deleteAction()
 
 void MainWindow::about()  { qDebug() <<"about"; }
 
+void MainWindow::selectShape(int type)
+{
+
+    qDebug() <<"selected "<<type;
+    switch(type) {
+    case 1:
+        selectRectangle();
+        break;
+    case 2:
+        selectParallelogram();
+        break;
+    case 3:
+        selectRhombus();
+        break;
+    case 4:
+        selectZigzag();
+        break;
+    case 5:
+        selectArrow();
+        break;
+    }
+}
+
 
 void MainWindow::selectFillColor(QColor newFillColor)
 {
@@ -429,27 +484,40 @@ void MainWindow::selectLineColor(QColor newLineColor)
 
 }
 
+
 void MainWindow::selectRectangle() {
+    shapeDefault();
     canvas->changeType(1);
+    ui->takeRectangle->setChecked(true);
     instrument = FIGURE;
 }
 void MainWindow::selectParallelogram() {
+    shapeDefault();
     canvas->changeType(2);
+    ui->takeParallelogram->setChecked(true);
     instrument = FIGURE;
 }
 void MainWindow::selectRhombus() {
+    shapeDefault();
     canvas->changeType(3);
+    ui->takeRhombus->setChecked(true);
     instrument = FIGURE;
 }
 
 void MainWindow::selectZigzag() {
+    shapeDefault();
     canvas->changeType(4);
+    ui->takeZigzag->setChecked(true);
     instrument = FIGURE;
+    ui->zigzagPoints->setEnabled(true);
 }
 
 void MainWindow::selectArrow() {
+    shapeDefault();
     canvas->changeType(5);
+    ui->takeArrow->setChecked(true);
     instrument = FIGURE;
+    ui->arrowsTipCoefficient->setEnabled(true);
 }
 
 void MainWindow::setZigzagPointAmount(int amount) {

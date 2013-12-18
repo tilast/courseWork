@@ -9,13 +9,11 @@ CanvasWidget::CanvasWidget(QWidget *parent) :
     creatingType = 1;
     zigzagPointsAmount = 5;
     defaultOffsetParallelogram = 30.0;
-    currentBackColor = Color(.5, .5, .5, 1);
-    currentLineColor = Color(.0, .0, .5, 1);
+    currentBackColor = Color(1, 1, 1, 1);
+    currentLineColor = Color(.0, 0, 0, 1);
     arrowsTipCoefficient = 0.2;
 
-    currentStyle.fillColor = currentBackColor;
-    currentStyle.lineColor = currentLineColor;
-    currentStyle.setStyle(currentLineColor);
+    updateStyle();
 }
 
 CanvasWidget::~CanvasWidget() {
@@ -88,6 +86,13 @@ void CanvasWidget::changeLineColor(QColor lineColor)
     update();
 }
 
+void CanvasWidget::updateStyle()
+{
+    currentStyle.fillColor = currentBackColor;
+    currentStyle.lineColor = currentLineColor;
+    currentStyle.setStyle(currentLineColor);
+}
+
 void CanvasWidget::clearSelectedShapes()
 {
     for(const auto &shape: shapes) {
@@ -130,7 +135,8 @@ void CanvasWidget::mousePressEvent(QMouseEvent *event) {
             //Нажали на фигуру
             toFront(i - 1); //переместилю фигуру вперед
             selected = shapes[shapes.size() - 1]; //Запоминаем последню выбранную фигуры
-
+            if (selected != NULL && selectedShapes.size() == 1)
+                emit shapeSelected(selected->getType());
             //Проверяем нажатие на контроллер масштабирования (левый верхний)
             if(selected->isTopLeft(pressedPoint, epsilon)) {
                 topLeftResize = true;
@@ -230,6 +236,8 @@ void CanvasWidget::mouseReleaseEvent(QMouseEvent *)
     else if(transformation == CREATING or !isKeyPressed(Qt::Key_Control) and selected != NULL) { //Оставляем 1 выделенную фигуру: конец создания фигуры, нажатие без Ctrl
         clearSelectedShapes();
         insertShapeInSelectedShapes(selected);
+        if (selected != NULL && selectedShapes.size() == 1)
+            emit shapeSelected(selected->getType());
     }
 
     update();

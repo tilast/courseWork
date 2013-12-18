@@ -31,7 +31,8 @@ protected:
     void keyPressEvent(QKeyEvent* event);
     void keyReleaseEvent(QKeyEvent * event);
     void deleteSelected();
-
+    bool eventFilter( QObject * o, QEvent * e );
+    void shapeDefault();
 private slots:
 
     void newFile();
@@ -57,6 +58,7 @@ private slots:
 
     void about();
 
+    void selectShape(int type);
 
     void selectRectangle();
     void selectParallelogram();

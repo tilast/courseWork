@@ -1253,7 +1253,7 @@ background-color:qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, stop:0 rgba
       <x>0</x>
       <y>530</y>
       <width>881</width>
-      <height>61</height>
+      <height>63</height>
      </rect>
     </property>
     <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -1273,11 +1273,23 @@ background-color:qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, stop:0 rgba
         <layout class="QHBoxLayout" name="horizontalLayout_4">
          <item>
           <widget class="QDoubleSpinBox" name="arrowsTipCoefficient">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
            <property name="inputMethodHints">
-            <set>Qt::ImhHiddenText</set>
+            <set>Qt::ImhNone</set>
+           </property>
+           <property name="frame">
+            <bool>true</bool>
            </property>
            <property name="readOnly">
-            <bool>true</bool>
+            <bool>false</bool>
+           </property>
+           <property name="buttonSymbols">
+            <enum>QAbstractSpinBox::UpDownArrows</enum>
+           </property>
+           <property name="accelerated">
+            <bool>false</bool>
            </property>
            <property name="keyboardTracking">
             <bool>false</bool>
@@ -1287,9 +1299,6 @@ background-color:qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, stop:0 rgba
            </property>
            <property name="suffix">
             <string notr="true"/>
-           </property>
-           <property name="keyboardTracking">
-            <bool>false</bool>
            </property>
            <property name="maximum">
             <double>1.000000000000000</double>
@@ -1315,13 +1324,16 @@ background-color:qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, stop:0 rgba
          </item>
          <item>
           <widget class="QSpinBox" name="zigzagPoints">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
            <property name="inputMethodHints">
             <set>Qt::ImhDigitsOnly</set>
            </property>
-           <property name="readOnly">
-            <bool>true</bool>
-          </property>
            <property name="wrapping">
+            <bool>false</bool>
+           </property>
+           <property name="readOnly">
             <bool>false</bool>
            </property>
            <property name="accelerated">
@@ -1365,7 +1377,7 @@ background-color:qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, stop:0 rgba
      <x>0</x>
      <y>0</y>
      <width>883</width>
-     <height>25</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu_File">

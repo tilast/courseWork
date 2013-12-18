@@ -15,6 +15,7 @@ public:
     explicit ColorDialogButton(QWidget *parent = 0);
     ~ColorDialogButton();
     QColor color() {return __currentColor;}
+    void setColor(QColor newColor) {__currentColor = newColor;}
 signals:
     void colorChanged(QColor newColor);
 
@@ -30,6 +31,7 @@ private:
 
     void clearLayout(QLayout *layout);
     void setButtonColor(QColor color);
+
 };
 
 #endif // COLORDIALOGBUTTON_H

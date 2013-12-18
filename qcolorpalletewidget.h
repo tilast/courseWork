@@ -16,6 +16,9 @@ public:
     explicit QColorPalleteWidget(QWidget *parent = 0);
     ~QColorPalleteWidget();
 
+    void setFrontColor(QColor color);
+    void setBackColor(QColor color);
+
     QColor getFrontColor() {return __frontColor;}
     QColor getBackColor() {return __backColor;}
 

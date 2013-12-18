@@ -1,4 +1,5 @@
 #include "svgfigureparser.h"
+#include <cmath>
 
 QStringList SVGFigureParser::parsePoints(const QString &string)
 {
@@ -72,4 +73,24 @@ QtRhombus *SVGFigureParser::parseRhombus(const QDomElement &e)
     Point2D leftTop(points[0].toFloat(),points[3].toFloat());
     Point2D rightBottom(points[4].toFloat(),points[7].toFloat());
     return new QtRhombus(leftTop, rightBottom);
+}
+
+QtZigzag *SVGFigureParser::parseCurve(const QDomElement &e)
+{
+//    <polyline points="442,145 500,37 558,145 616,37 674,145 " style="fill:none;stroke:rgb(0,0,0);stroke-width:2" />
+    if (e.tagName() != "polyline" || e.attribute("points").isEmpty())
+        return NULL;
+    QStringList points = parsePoints(e.attribute("points"));
+    if (points.size() < 4) //min 2 point
+        return NULL;
+    Point2D left(points[0].toFloat(), points[1].toFloat());
+    float pa = points[2].toFloat()-points[0].toFloat();
+    Point2D right(points[0].toFloat() + std::ceil(points.size()/2)*pa, points[3].toFloat());
+
+    return new QtZigzag(left,right,pa);
+}
+
+QtArrow *SVGFigureParser::parseArrow(const QDomElement &element)
+{
+
 }
