@@ -36,7 +36,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     ui->colorPanel->setBackColor(backColor);
     createActions();
     createMenus();
-
+    selectShape(1);
     setCurrentFile("Untitled");
     setUnifiedTitleAndToolBarOnMac(true);
 
@@ -56,7 +56,9 @@ bool MainWindow::eventFilter( QObject * o, QEvent * e ) {
 
 void MainWindow::shapeDefault()
 {
+    ui->arrowsTipCoefficient->hide();
     ui->arrowsTipCoefficient->setEnabled(false);
+    ui->zigzagPoints->hide();
     ui->zigzagPoints->setEnabled(false);
 }
 
@@ -509,6 +511,7 @@ void MainWindow::selectZigzag() {
     canvas->changeType(4);
     ui->takeZigzag->setChecked(true);
     instrument = FIGURE;
+    ui->zigzagPoints->show();
     ui->zigzagPoints->setEnabled(true);
 }
 
@@ -517,6 +520,7 @@ void MainWindow::selectArrow() {
     canvas->changeType(5);
     ui->takeArrow->setChecked(true);
     instrument = FIGURE;
+    ui->arrowsTipCoefficient->show();
     ui->arrowsTipCoefficient->setEnabled(true);
 }
 

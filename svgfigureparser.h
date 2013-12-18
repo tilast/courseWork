@@ -25,6 +25,8 @@ public:
             shape = parsePolygon(e);
         if (e.tagName() == "polyline")
             shape = parseCurve(e);
+        if (e.tagName() == "arrow")
+            shape = parseArrow(e);
 
         if (shape == NULL)
             return NULL;

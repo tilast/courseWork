@@ -78,19 +78,55 @@ QtRhombus *SVGFigureParser::parseRhombus(const QDomElement &e)
 QtZigzag *SVGFigureParser::parseCurve(const QDomElement &e)
 {
 //    <polyline points="442,145 500,37 558,145 616,37 674,145 " style="fill:none;stroke:rgb(0,0,0);stroke-width:2" />
+
+
     if (e.tagName() != "polyline" || e.attribute("points").isEmpty())
         return NULL;
     QStringList points = parsePoints(e.attribute("points"));
     if (points.size() < 4) //min 2 point
         return NULL;
-    Point2D left(points[0].toFloat(), points[1].toFloat());
-    float pa = points[2].toFloat()-points[0].toFloat();
-    Point2D right(points[0].toFloat() + std::ceil(points.size()/2)*pa, points[3].toFloat());
+    Point2D left(points[0].toFloat(), points[3].toFloat());
+    float delta = points[4].toFloat()-points[2].toFloat();
+//    delta /= 2;
+    float pa = points.size();
+
+    Point2D right(points[0].toFloat() + delta * pa, points[1].toFloat());
 
     return new QtZigzag(left,right,pa);
 }
 
-QtArrow *SVGFigureParser::parseArrow(const QDomElement &element)
+QtArrow *SVGFigureParser::parseArrow(const QDomElement &e)
 {
+//    <arrow>
+//        <line x1="527" y1="389" x2="804" y2="389" style="stroke:rgb(0,0,0);stroke-width:2" />
+//        <line x1="748.6" y1="341" x2="804" y2="389" style="stroke:rgb(0,0,0);stroke-width:1" />
+//        <line x1="748.6" y1="437" x2="804" y2="389" style="stroke:rgb(0,0,0);stroke-width:1" />
+//    </arrow>
+    if (e.tagName() != "arrow")
+        return NULL;
+    QDomNodeList lineList = e.childNodes();
+    qDebug() <<lineList.size();
+
+    float x1 = lineList.at(0).toElement().attribute("x1").toFloat();
+    float x2 = lineList.at(0).toElement().attribute("x2").toFloat();
+    float y2 = lineList.at(0).toElement().attribute("y2").toFloat();
+
+    float x3 = lineList.at(1).toElement().attribute("x1").toFloat();
+    float y3 = lineList.at(1).toElement().attribute("y1").toFloat();
+
+    float y5 = lineList.at(2).toElement().attribute("y1").toFloat();
+    Point2D leftPoint(x1, y3);
+    Point2D rightPoint(x2, y2);
+    Point2D tl(x1, y3);
+    Point2D br(x2, y5);
+    float delta = x2 - x3;
+    float length = x2 - x1;
+
+    float c = delta / length;
+
+    Point2D first(x1,y3);
+    Point2D second(x2,y5);
+    float coef = (x2-x3)/(x2-x1);
+    return new QtArrow(first, second, coef);
 
 }
