@@ -51,7 +51,7 @@ void QtArrow::draw(QPainter &painter) const {
 
         bottomTip.y = br.y;
         bottomTip.x = tl.x + Arrow::size.x*tipCoef;
-        painter.drawLine(QPointF(leftPoint.x, leftPoint.y), QPointF(rightPoint.x, rightPoint.y));
+        painter.drawLine(QPointF(rightPoint.x, rightPoint.y), QPointF(leftPoint.x, leftPoint.y));
         painter.drawLine(QPointF(topTip.x, topTip.y), QPointF(leftPoint.x, leftPoint.y));
         painter.drawLine(QPointF(bottomTip.x, bottomTip.y), QPointF(leftPoint.x, leftPoint.y));
     }
@@ -133,8 +133,42 @@ int QtArrow::getType() {
 }
 
 QString QtArrow::svgElementCode() const {
-    return QString("")
-            .append("<arrow>")
-            .append("")
-            .append("</arrow>");
+    Point2D tl = Arrow::center - Arrow::size * 0.5;
+    Point2D br = Arrow::center + Arrow::size * 0.5;
+
+    Point2D leftPoint;
+    leftPoint.x = tl.x;
+    leftPoint.y = tl.y + (br.y - tl.y)*0.5;
+
+    Point2D rightPoint;
+    rightPoint.x = br.x;
+    rightPoint.y = tl.y + (br.y - tl.y)*0.5;
+
+    Point2D topTip, bottomTip, sidePoint;
+    if(Arrow::getSide()) {
+        topTip.y = tl.y;
+        topTip.x = br.x - Arrow::size.x*tipCoef;
+
+        bottomTip.y = br.y;
+        bottomTip.x = br.x - Arrow::size.x*tipCoef;
+        sidePoint = rightPoint;
+    } else {
+        topTip.y = tl.y;
+        topTip.x = tl.x + Arrow::size.x*tipCoef;
+
+        bottomTip.y = br.y;
+        bottomTip.x = tl.x + Arrow::size.x*tipCoef;
+        sidePoint = leftPoint;
+    }
+
+    Color p = getStyle().lineColor;
+
+    return QString("<arrow><line x1=\"%1\" y1=\"%2\" x2=\"%3\" y2=\"%4\" style=\"stroke:rgb(%5,%6,%7);stroke-width:2\" /><line x1=\"%8\" y1=\"%9\" x2=\"%10\" y2=\"%11\" style=\"stroke:rgb(%12,%13,%14);stroke-width:1\" /><line x1=\"%15\" y1=\"%16\" x2=\"%17\" y2=\"%18\" style=\"stroke:rgb(%19,%20,%21);stroke-width:1\" /></arrow>").arg(leftPoint.x).arg(leftPoint.y).arg(rightPoint.x).arg(rightPoint.y)
+    .arg(p.red*255).arg(p.green*255).arg(p.blue*255)
+    .arg(topTip.x).arg(topTip.y)
+    .arg(sidePoint.x).arg(sidePoint.y)
+    .arg(p.red*255).arg(p.green*255).arg(p.blue*255)
+    .arg(bottomTip.x).arg(bottomTip.y)
+    .arg(sidePoint.x).arg(sidePoint.y)
+    .arg(p.red*255).arg(p.green*255).arg(p.blue*255);
 }

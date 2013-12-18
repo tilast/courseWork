@@ -1288,6 +1288,9 @@ background-color:qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, stop:0 rgba
            <property name="suffix">
             <string notr="true"/>
            </property>
+           <property name="keyboardTracking">
+            <bool>false</bool>
+           </property>
            <property name="maximum">
             <double>1.000000000000000</double>
            </property>
@@ -1317,6 +1320,12 @@ background-color:qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, stop:0 rgba
            </property>
            <property name="readOnly">
             <bool>true</bool>
+          </property>
+           <property name="wrapping">
+            <bool>false</bool>
+           </property>
+           <property name="accelerated">
+            <bool>false</bool>
            </property>
            <property name="keyboardTracking">
             <bool>false</bool>
@@ -1356,7 +1365,7 @@ background-color:qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, stop:0 rgba
      <x>0</x>
      <y>0</y>
      <width>883</width>
-     <height>22</height>
+     <height>25</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu_File">
@@ -1518,7 +1527,7 @@ background-color:qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, stop:0 rgba
    </property>
   </action>
  </widget>
- <layoutdefault spacing="6" margin="11"/>
+ <layoutdefault spacing="6" margin="112"/>
  <customwidgets>
   <customwidget>
    <class>CanvasWidget</class>

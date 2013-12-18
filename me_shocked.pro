@@ -69,4 +69,14 @@ OTHER_FILES += \
     me_shocked_MACOSX.pro \
     me_shocked.pro.user \
     LICENSE \
-    exit
+    exit \
+    images/icons/zigzag.psd \
+    images/icons/zigzag.png \
+    images/icons/romb.psd \
+    images/icons/romb.png \
+    images/icons/rect.psd \
+    images/icons/rect.png \
+    images/icons/parm.psd \
+    images/icons/parm.png \
+    images/icons/arrow.psd \
+    images/icons/arrow.png
