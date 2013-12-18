@@ -106,6 +106,28 @@ int QtZigzag::getType() {
     return Zigzag::getType();
 }
 QString QtZigzag::svgElementCode() const {
-    return QString("kjdfhkjd");
+    Point2D tl = Zigzag::center - Zigzag::size * 0.5;
+    Point2D br = Zigzag::center + Zigzag::size * 0.5;
+    Color p = getStyle().lineColor;
+    float partLine = (br.x - tl.x) / (float)pointsAmount;
+
+    QString stream = QString("<polyline points=\"");
+    float x, y;
+    for(int i = 0; i < pointsAmount; i++) {
+        x = tl.x + i*partLine;
+        if (i % 2) {
+            y = tl.y;
+        } else {
+            y = br.y;
+        }
+
+        stream.append("%1,%2 ");
+        stream = stream.arg((int)x).arg((int)y);
+    }
+
+    stream.append("\" style=\"fill:none;stroke:rgb(%1,%2,%3);stroke-width:2\" />");
+    stream = stream.arg(p.red*255).arg(p.green*255).arg(p.blue*255);
+
+    return stream;
 }
 

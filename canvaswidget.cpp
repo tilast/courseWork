@@ -142,10 +142,6 @@ void CanvasWidget::mousePressEvent(QMouseEvent *event) {
                topRightResize = true;
                 // transformation = LEFT_RESIZE;
             }
-            //Проверяем нажатие на контроллек масштабирования (правый нижний)
-            // else if(selected->isBottomRight(pressedPoint, epsilon)){
-            //     transformation = RIGHT_RESIZE;
-            // }
 
             if (transformation == LEFT_RESIZE || transformation == RIGHT_RESIZE) //Оставляем только одну выделенную фигуру6 которую хотим масштабировать
                 clearSelectedShapes();
@@ -190,19 +186,6 @@ void CanvasWidget::mouseMoveEvent(QMouseEvent *event) {
                 {
                     (&*shape)->move((&*shape)->getCenter()-selected->getCenter() + currentPoint - pressedPoint);
                 }
-// =======
-//             if(transformation == LEFT_RESIZE) {
-//                 selected->resize(currentPoint, 0);
-//             } else if(transformation == RIGHT_RESIZE) {
-//                 selected->resize(currentPoint, 1);
-//             } else if(controlPointModify) {
-//                 ((QtParallelogram*)selected)->setControlPoint(currentPoint.x);
-//             } else if (transformation == MOVING) {
-//                 for(const auto &shape: selectedShapes) //foreach Loop
-//                 {
-//                     (&*shape)->move((&*shape)->getCenter()-selected->getCenter() + currentPoint - pressedPoint);
-//                 }
-//>>>>>>> 58591d064c3b898ae4671dd70530a81f8dfeff03
             }
 
         } else {
@@ -231,7 +214,6 @@ void CanvasWidget::mouseMoveEvent(QMouseEvent *event) {
             shapes.push_back(selected);
             selected->select(true);
 
-            /////////////////
             setModified(true);
         }
 

@@ -163,7 +163,7 @@ QString QtArrow::svgElementCode() const {
 
     Color p = getStyle().lineColor;
 
-    QString stream = QString("<arrow><line x1=\"%1\" y1=\"%2\" x2=\"%3\" y2=\"%4\" style=\"stroke:rgb(%5,%6,%7);stroke-width:1\" /><line x1=\"%8\" y1=\"%9\" x2=\"%10\" y2=\"%11\" style=\"stroke:rgb(%12,%13,%14);stroke-width:1\" /><line x1=\"%15\" y1=\"%16\" x2=\"%17\" y2=\"%18\" style=\"stroke:rgb(%19,%20,%21);stroke-width:1\" /></arrow>").arg(leftPoint.x).arg(leftPoint.y).arg(rightPoint.x).arg(rightPoint.y)
+    return QString("<arrow><line x1=\"%1\" y1=\"%2\" x2=\"%3\" y2=\"%4\" style=\"stroke:rgb(%5,%6,%7);stroke-width:2\" /><line x1=\"%8\" y1=\"%9\" x2=\"%10\" y2=\"%11\" style=\"stroke:rgb(%12,%13,%14);stroke-width:1\" /><line x1=\"%15\" y1=\"%16\" x2=\"%17\" y2=\"%18\" style=\"stroke:rgb(%19,%20,%21);stroke-width:1\" /></arrow>").arg(leftPoint.x).arg(leftPoint.y).arg(rightPoint.x).arg(rightPoint.y)
     .arg(p.red*255).arg(p.green*255).arg(p.blue*255)
     .arg(topTip.x).arg(topTip.y)
     .arg(sidePoint.x).arg(sidePoint.y)
@@ -171,8 +171,4 @@ QString QtArrow::svgElementCode() const {
     .arg(bottomTip.x).arg(bottomTip.y)
     .arg(sidePoint.x).arg(sidePoint.y)
     .arg(p.red*255).arg(p.green*255).arg(p.blue*255);
-
-    qDebug() << stream;
-
-    return stream;
 }
