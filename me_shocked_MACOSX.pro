@@ -33,7 +33,8 @@ SOURCES += main.cpp\
     zigzag.cpp \
     qtzigzag.cpp \
     arrow.cpp \
-    qtarrow.cpp
+    qtarrow.cpp \
+    qimageradiobutton.cpp
 
 HEADERS  += mainwindow.h \
     base.h \
@@ -56,7 +57,13 @@ HEADERS  += mainwindow.h \
     zigzag.h \
     qtzigzag.h \
     arrow.h \
-    qtarrow.h
+    qtarrow.h \
+    qimageradiobutton.h
 
 FORMS    += mainwindow.ui \
     qcolorpalletewidget.ui
+
+OTHER_FILES +=
+
+RESOURCES += \
+    images.qrc
