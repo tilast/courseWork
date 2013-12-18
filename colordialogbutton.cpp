@@ -1,6 +1,7 @@
 #include "colordialogbutton.h"
 
 #include <QColorDialog>
+#include <QPainter>
 
 ColorDialogButton::ColorDialogButton(QWidget *parent) :
     QPushButton(parent)
@@ -13,8 +14,51 @@ ColorDialogButton::ColorDialogButton(QWidget *parent) :
 
     this->setText(" ");
     this->setFlat(true);
+
+    QRect *rect = new QRect(this->rect().topLeft(),this->rect().bottomRight());
+    QRegion* region = new QRegion(*rect,QRegion::Rectangle);
+
+    this->setMask(*region);
     update();
     setButtonColor(__currentColor);
+}
+
+void ColorDialogButton::paintEvent(QPaintEvent *aPaintEvent)
+{
+
+    qreal opacity(0.675);
+    int roundness(40);
+    QRect widget_rect = this->rect();
+
+    QPainter painter(this);
+    painter.save();
+
+//    painter.setRenderHint(QPainter::Antialiasing,true);
+//    painter.setRenderHint(QPainter::CompositionMode_Clear);
+
+
+
+  // clip
+    QPainterPath rounded_rect;
+    rounded_rect.setFillRule(Qt::FillRule::);
+    painter.setBackground(__currentColor);
+    rounded_rect.addRoundRect(1, 1, widget_rect.width() - 2, widget_rect.height() - 2, roundness, roundness);
+
+    painter.setClipPath(rounded_rect);
+
+    // get clipping region
+  QRegion maskregion = painter.clipRegion();
+
+  // mask the widget
+  setMask(maskregion);
+  painter.setOpacity(opacity);
+
+  // fill path with color
+//  painter.fillPath(rounded_rect,QBrush());
+
+  // restore painter
+  painter.restore();
+
 }
 
 ColorDialogButton::~ColorDialogButton()
@@ -56,8 +100,6 @@ void ColorDialogButton::setButtonColor(QColor color)
     QPalette palette = this->palette();
     palette.setColor(QPalette::Active, QPalette::Button,color);
     palette.setColor(QPalette::Inactive, QPalette::Button, color);
-
-
 
     this->setPalette(palette);
     this->setAutoFillBackground( true );

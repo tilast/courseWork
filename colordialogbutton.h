@@ -14,6 +14,8 @@ class ColorDialogButton : public QPushButton
 public:
     explicit ColorDialogButton(QWidget *parent = 0);
     ~ColorDialogButton();
+    void paintEvent(QPaintEvent *aPaintEvent);
+
     QColor color() {return __currentColor;}
     void setColor(QColor newColor) {__currentColor = newColor;}
 signals:
