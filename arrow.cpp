@@ -1,8 +1,10 @@
 #include "arrow.h"
 
-Arrow::Arrow(const Point2D& p1, const Point2D& p2) {
+Arrow::Arrow(const Point2D& p1, const Point2D& p2, float coef) {
     setBounds(p1, p2);
     setType();
+    setSide(1);
+    tipCoef = coef;
 }
 
 void Arrow::setBounds(const Point2D &p1, const Point2D &p2) {
@@ -11,6 +13,13 @@ void Arrow::setBounds(const Point2D &p1, const Point2D &p2) {
 }
 void Arrow::move(const Point2D& destination) {
     center = destination;
+}
+
+void Arrow::setSide(bool s) {
+    side = s;
+}
+bool Arrow::getSide() const {
+    return side;
 }
 
 void Arrow::resize(const Point2D& destination, short t) {
@@ -36,6 +45,10 @@ void Arrow::resize(const Point2D& destination, short t) {
         br.y = destination.y;
         setBounds(tl, br);
     }
+}
+
+void Arrow::reflect() {
+    setSide(!getSide());
 }
 
 bool Arrow::belongs(const Point2D& p) {

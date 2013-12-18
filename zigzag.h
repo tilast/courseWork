@@ -16,6 +16,7 @@ public:
     virtual bool belongs(const Point2D& point);
     virtual void setPointsAmount(const int& pa);
     virtual void setType();
+    virtual void reflect();
     virtual int getType();
 };
 

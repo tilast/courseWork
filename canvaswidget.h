@@ -43,6 +43,7 @@ public:
     Color currentBackColor;
     DrawStyle currentStyle;
     int zigzagPointsAmount;
+    float arrowsTipCoefficient;
 
     void changeType(int type);
 
@@ -50,6 +51,8 @@ public:
     void changeBackColor(QColor backColor);
     void changeLineColor(int color);
     void changeLineColor(QColor lineColor);
+    void reflect();
+    void setArrowsTipCoefficient(float coef);
     bool isModified() { return __isModified; }
     void setModified(bool flag) { __isModified = flag; }
     void selectAll();

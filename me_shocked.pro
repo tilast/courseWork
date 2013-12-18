@@ -30,7 +30,11 @@ SOURCES += main.cpp\
     svgparser.cpp \
     svgfigureparser.cpp \
     arrow.cpp \
-    qtarrow.cpp
+    qtarrow.cpp \
+    qtshape.cpp \
+    qsvgparser.cpp \
+    qcolorpalletewidget.cpp \
+    colordialogbutton.cpp
 
 HEADERS  += mainwindow.h \
     base.h \
@@ -49,6 +53,20 @@ HEADERS  += mainwindow.h \
     svgparser.h \
     svgfigureparser.h \
     arrow.h \
-    qtarrow.h
+    qtarrow.h \
+    QtShapeHeaders.h \
+    qsvgparser.h \
+    qcolorpalletewidget.h \
+    colordialogbutton.h
 
-FORMS    += mainwindow.ui
+FORMS    += mainwindow.ui \
+    qcolorpalletewidget.ui \
+    colordialogbutton.ui
+
+OTHER_FILES += \
+    README.md \
+    me_shocked_MACOSX.pro.user \
+    me_shocked_MACOSX.pro \
+    me_shocked.pro.user \
+    LICENSE \
+    exit

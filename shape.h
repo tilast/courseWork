@@ -14,6 +14,7 @@ public:
     virtual void move(const T& destination) = 0;
     virtual bool belongs(const T& point) = 0;
     virtual void resize(const T& destination, short t) = 0;
+    virtual void reflect() = 0;
     virtual void setType() = 0;
     virtual int getType() = 0;
 protected:

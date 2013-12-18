@@ -42,6 +42,9 @@ void QtZigzag::draw(QPainter &painter) const {
 
     }
 }
+void QtZigzag::reflect() {
+
+}
 
 bool QtZigzag::isTopLeft(Point2D pressedPoint, Point2D epsilon) const {
     Point2D tl = Zigzag::center - Zigzag::size * 0.5;

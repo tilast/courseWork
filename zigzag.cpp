@@ -18,6 +18,9 @@ void Zigzag::setBounds(const Point2D &p1, const Point2D &p2) {
 void Zigzag::move(const Point2D& destination) {
     center = destination;
 }
+void Zigzag::reflect() {
+
+}
 
 void Zigzag::resize(const Point2D& destination, short t) {
     Point2D p1 = center - size * 0.5;

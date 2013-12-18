@@ -94,6 +94,10 @@ void QtRectangle::setType() {
     Rectangle::setType();
 }
 
+void QtRectangle::reflect(){
+    Rectangle::reflect();
+}
+
 int QtRectangle::getType() {
     return Rectangle::getType();
 }
