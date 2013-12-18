@@ -40,7 +40,7 @@ void ColorDialogButton::paintEvent(QPaintEvent *aPaintEvent)
 
   // clip
     QPainterPath rounded_rect;
-    rounded_rect.setFillRule(Qt::FillRule::);
+
     painter.setBackground(__currentColor);
     rounded_rect.addRoundRect(1, 1, widget_rect.width() - 2, widget_rect.height() - 2, roundness, roundness);
 
