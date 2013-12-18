@@ -55,7 +55,7 @@ void CanvasWidget::changeBackColor(QColor backColor)
     currentBackColor = Color(backColor.red()/255.0,backColor.green()/255.0,backColor.blue()/255.0);
     if (!selectedShapes.empty())
         for(const auto &shape: selectedShapes) {
-            (&*shape)->getStyle().lineColor.setColor(currentBackColor);
+            (&*shape)->getStyle().fillColor.setColor(currentBackColor);
         }
     update();
 }
