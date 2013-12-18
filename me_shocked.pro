@@ -80,3 +80,7 @@ OTHER_FILES += \
     images/icons/parm.png \
     images/icons/arrow.psd \
     images/icons/arrow.png
+
+RESOURCES += \
+    images.qrc \
+    icons.qrc
