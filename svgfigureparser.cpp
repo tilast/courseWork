@@ -105,6 +105,7 @@ QtArrow *SVGFigureParser::parseArrow(const QDomElement &e)
     if (e.tagName() != "arrow")
         return NULL;
     QDomNodeList lineList = e.childNodes();
+    bool side = e.attribute("side").toInt();
     qDebug() <<lineList.size();
 
     float x1 = lineList.at(0).toElement().attribute("x1").toFloat();
@@ -124,9 +125,16 @@ QtArrow *SVGFigureParser::parseArrow(const QDomElement &e)
 
     float c = delta / length;
 
+    qDebug() << delta << " delta";
+
     Point2D first(x1,y3);
     Point2D second(x2,y5);
     float coef = (x2-x3)/(x2-x1);
-    return new QtArrow(first, second, coef);
+    QtArrow * arrow = (side) ? new QtArrow(first, second, coef) : new QtArrow(second, first, 1 - coef);
 
+    if(!side) {
+        arrow->setSide(side);
+    }
+
+    return arrow;
 }
