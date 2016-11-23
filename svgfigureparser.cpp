@@ -121,9 +121,9 @@ QtArrow *SVGFigureParser::parseArrow(const QDomElement &e)
     Point2D tl(x1, y3);
     Point2D br(x2, y5);
     float delta = x2 - x3;
-    float length = x2 - x1;
+    //float length = x2 - x1; - unused variable
 
-    float c = delta / length;
+    //float c = delta / length; - unused variable
 
     qDebug() << delta << " delta";
 

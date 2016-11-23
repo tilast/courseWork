@@ -19,6 +19,7 @@
 
 #include <svgstyleparse.h>
 #include <svgfigureparser.h>
+#include <QApplication>
 
 #include "colordialogbutton.h"
 
@@ -66,7 +67,7 @@ MainWindow::~MainWindow()
 {
     delete ui;
 }
-void MainWindow::keyReleaseEvent(QKeyEvent * event) {
+void MainWindow::keyReleaseEvent(QKeyEvent * /*event*/) {
     canvas->pressedKeyCode = 0;
 }
 
@@ -273,7 +274,7 @@ bool MainWindow::saveFileByText(QString fileName, QString text) {
         QTextStream out(&file);
             out <<text;
     }
-
+    return true;
 }
 
 bool MainWindow::saveFileByData(QString fileName)
@@ -294,7 +295,7 @@ bool MainWindow::saveFileByData(QString fileName)
             out.setVersion(QDataStream::Qt_5_0);
             out <<canvas->shapes.data();
     }
-
+    return true;
 }
 
 

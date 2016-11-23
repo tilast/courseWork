@@ -130,12 +130,16 @@ void CanvasWidget::mousePressEvent(QMouseEvent *event) {
 
     selected = NULL;
     transformation = NONE;
+    if (!shapes.size ())
+      return;
     for(unsigned i = shapes.size(); i > 0; i--) {
         if(shapes[i - 1]->belongs(pressedPoint)) {
             //Нажали на фигуру
             toFront(i - 1); //переместилю фигуру вперед
             selected = shapes[shapes.size() - 1]; //Запоминаем последню выбранную фигуры
-            if (selected != NULL && selectedShapes.size() == 1)
+            if (!selected)
+              continue;
+            if (selectedShapes.size() == 1)
                 emit shapeSelected(selected->getType());
             //Проверяем нажатие на контроллер масштабирования (левый верхний)
             if(selected->isTopLeft(pressedPoint, epsilon)) {
@@ -169,6 +173,8 @@ void CanvasWidget::mousePressEvent(QMouseEvent *event) {
 
 void CanvasWidget::mouseMoveEvent(QMouseEvent *event) {
 
+    if (!transformation)
+      return;
     if((event->buttons()) & Qt::LeftButton) {
         Point2D currentPoint;
         currentPoint.x = event->localPos().x();
@@ -221,7 +227,7 @@ void CanvasWidget::mouseMoveEvent(QMouseEvent *event) {
             selected->select(true);
 
             setModified(true);
-        }
+          }
 
         update();
     }
