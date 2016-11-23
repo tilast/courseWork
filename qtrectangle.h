@@ -4,6 +4,7 @@
 #include "rectangle.h"
 #include "qtshape.h"
 #include <QPainter>
+#include <QString>
 
 class QtRectangle : public Rectangle, public QtShape2D {
 public:
